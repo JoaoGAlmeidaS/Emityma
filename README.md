@@ -44,7 +44,7 @@ As relações entre essas entidades permitem uma visão holística da operação
 
 O logotipo do Emityma incorpora elementos que representam a conexão com a natureza e a agricultura:
 
-![Logo Emityma](emityma\static\img\logo\logo.png)
+![Logo Emityma](emityma/static/img/logo/logo.png)
 
 
 
