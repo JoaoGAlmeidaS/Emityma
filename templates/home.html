@@ -46,7 +46,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <nav class="navbar navbar-expand-lg">
-                                <a class="navbar-brand headerNLogo" href="index.html">
+                                <a class="navbar-brand headerNLogo" href="./">
                                     <img src="{% static 'img/logo/logo.png' %}" alt="">
                                 </a>
                                 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -60,19 +60,19 @@
                                 <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                     <ul id="nav" class="navbar-nav ml-auto">
                                         <li class="nav-item">
-                                            <a class="page-scroll active" href="#home">Home</a>
+                                            <a class="page-scroll active" href="#home">Inicio</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="page-scroll" href="#features">Features</a>
+                                            <a class="page-scroll" href="#features">Funcionalidades</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="page-scroll" href="#process">Process</a>
+                                            <a class="page-scroll" href="#why-use">Processo</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="page-scroll" href="#subscribe">Subscribe</a>
+                                            <a class="page-scroll" href="#faq">Perguntas Frequentes</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="page-scroll" href="#">Entrar/Cadastrar</a>
+                                            <a class="page-scroll" href="/entrar/">Entrar / Cadastrar</a>
                                         </li>
                                     </ul>
                                 </div> <!-- navbar collapse -->
@@ -86,14 +86,15 @@
         <!-- ========================= header end ========================= -->
 
         <!-- ========================= slider-section start ========================= -->
-        <section id="home" class="hero-section img-bg" style="background-image: url({%static 'img/hero/hero-bg.svg' %})">
+         
+        <section id="home" class="hero-section img-bg" style="background-image: url('{% static 'img/hero/hero-bg.svg' %}')">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-xl-7 col-lg-6">
                         <div class="hero-content-wrapper">
                             <h1 class="wow fadeInDown" data-wow-delay=".4s" data-wow-duration="1.3s">Sistema de Gerenciamento de Fazenda</h1>
                             <p class="wow fadeInLeft" data-wow-delay=".6s" data-wow-duration="1.3s">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore.</p>
-                            <a href="#features" class="theme-btn wow fadeInUp" data-wow-delay=".8s" data-wow-duration="1.3s">Explore Features</a>
+                            <a href="#features" class="theme-btn wow fadeInUp" data-wow-delay=".8s" data-wow-duration="1.3s">Explore as Funcionalidades</a>
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-6">
@@ -114,7 +115,7 @@
                     <div class="col-xl-5 col-lg-6 col-md-8 mx-auto">
                         <div class="section-title text-center mb-55">
                             <span class="wow fadeInDown" data-wow-delay=".2s">Our Core</span>
-                            <h2 class="mb-15 wow fadeInUp" data-wow-delay=".4s">Features</h2>
+                            <h2 class="mb-15 wow fadeInUp" data-wow-delay=".4s">Funcionalidades</h2>
                             <p class="wow fadeInUp" data-wow-delay=".6s">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.</p>
                         </div>
                     </div>
@@ -288,7 +289,7 @@
         <!-- ========================= testimonial-section end ========================= -->
 
         <!-- ========================= faq-section start ========================= -->
-        <section class="faq-section pt-150">
+        <section id="faq" class="faq-section pt-150">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-xl-6 col-lg-6">
@@ -416,7 +417,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="footer-links text-center footerNLogo">
-                            <a href="index.html" class="logo"><img src="{% static 'img/logo/logo.png' %}" alt=""> </a>
+                            <a href="" class="logo"><img src="{% static 'img/logo/logo.png' %}" alt=""> </a>
                             <div class="footer-social-links">
                                 <ul>
                                     <li>

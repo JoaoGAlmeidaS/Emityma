@@ -202,7 +202,7 @@ p {
 .scroll-top {
   width: 45px;
   height: 45px;
-  background: #E44E83;
+  background: #4CA649;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -218,7 +218,7 @@ p {
 }
 
 .scroll-top:hover {
-  background: rgba(228, 78, 131, 0.8);
+  background: #1B7130;
   color: #fff;
 }
 
@@ -317,7 +317,7 @@ p {
   height: 100%;
   border-style: solid;
   /* Spinner Color */
-  border-color: #E44E83 #E44E83 #ddd;
+  border-color: #4CA649 #4CA649 #ddd;
   border-radius: 50%;
   border-width: 6px;
 }
@@ -1617,7 +1617,7 @@ p {
 .faq-item .faq-header .faq-btn::after {
   content: '';
   position: absolute;
-  border-top: 6px solid #E44E83;
+  border-top: 6px solid #4CA649;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   right: 25px;
@@ -2008,7 +2008,7 @@ p {
 }
 
 .footer .footer-links .footer-menu ul li a:hover {
-  color: #E44E83;
+  color: #4CA649;
 }
 
 .footer .copyright-area {
@@ -2027,3 +2027,4 @@ p {
 .footerNLogo img{
   width: 40%;
 }
+
