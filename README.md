@@ -11,7 +11,6 @@ O objetivo do Emityma é oferecer uma solução integrada para produtores rurais
 
 - **Cadastro de Fazendas e Talhões**: Gerencie múltiplas propriedades e subdivisões.
 - **Gestão de Culturas**: Acompanhe o ciclo de vida das plantações, desde o plantio até a colheita.
-- **Controle de Animais e Lotes**: Monitore rebanhos, incluindo informações sobre espécies, raças e saúde.
 - **Gerenciamento de Funcionários**: Registre dados de colaboradores e atribua tarefas específicas.
 - **Controle de Equipamentos e Manutenções**: Mantenha um histórico de máquinas e suas manutenções preventivas e corretivas.
 - **Gestão de Estoques**: Controle entradas e saídas de insumos, como sementes, fertilizantes e rações.
@@ -54,5 +53,6 @@ O logotipo do Emityma incorpora elementos que representam a conexão com a natur
 - **Backend**: Django
 
 
-
+## Para Implementar Depois
+- **Controle de Animais e Lotes**: Monitore rebanhos, incluindo informações sobre espécies, raças e saúde.
 
