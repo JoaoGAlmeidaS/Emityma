@@ -36,7 +36,7 @@ O sistema é estruturado com as seguintes entidades principais:
 - **Receita/Despesa**
 - **Usuário**
 
-![Imagem das Relações](BancoDados.png)
+![Imagem das Relações](BancoDados.jpg)
 
 As relações entre essas entidades permitem uma visão holística da operação da fazenda, facilitando a tomada de decisões baseada em dados.
 

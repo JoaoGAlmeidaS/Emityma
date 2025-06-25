@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Emityma - Escolher Fazenda{% endblock %}
+
+    
+
+{% block content %}
+    {% include "topbar.html" %}
+    
+<div class="container mt-5">
+    <h2>Selecione uma Fazenda</h2>
+    {% if fazendas %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="fazenda_id">Fazenda:</label>
+                <select class="form-control" id="fazenda_id" name="fazenda_id" required>
+                    <option value="" disabled selected>Escolha uma fazenda</option>
+                    {% for fazenda in fazendas %}
+                        <option value="{{ fazenda.id_fazenda }}">{{ fazenda.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Entrar</button>
+        </form>
+    {% else %}
+        <div class="alert alert-warning mt-4">
+            Você ainda não possui nenhuma fazenda cadastrada.<br>
+            <a href="{% url 'cadastrar_fazenda' %}" class="btn btn-success mt-2">Criar nova fazenda</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

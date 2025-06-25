@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro de Fazenda{% endblock %}
+
+{% block content %}
+    {% include "topbar.html" %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center mb-0">Cadastro de Fazenda</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{% url 'cadastrar_fazenda' %}">
+                            {% csrf_token %}
+                            <!-- Campo Proprietário -->
+                            <div class="mb-4">
+                                <label for="proprietario" class="form-label">Proprietário</label>
+                                <input type="text" class="form-control" id="proprietario" name="proprietario" placeholder="Nome completo do proprietário" required>
+                            </div>
+
+                            <!-- Campo Nome da Fazenda -->
+                            <div class="mb-4">
+                                <label for="nome" class="form-label">Nome da Fazenda</label>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome da propriedade" required>
+                            </div>
+
+                            <!-- Campo Tamanho -->
+                            <div class="mb-4">
+                                <label for="tamanho" class="form-label">Tamanho (ha)</label>
+                                <input type="number" class="form-control" id="tamanho" name="tamanho" placeholder="Ex: 1500" step="0.01" required>
+                            </div>
+
+                            <!-- Campo E-mail -->
+                            <div class="mb-4">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="contato@email.com" required>
+                            </div>
+
+                            <!-- Campo Telefone -->
+                            <div class="mb-4">
+                                <label for="telefone" class="form-label">Telefone</label>
+                                <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(XX) XXXXX-XXXX" required>
+                            </div>
+                            
+                            <!-- Campo UF -->
+                            <div class="mb-4">
+                                <label for="uf" class="form-label">UF</label>
+                                <select id="uf" name="uf" class="form-select" required>
+                                    <option selected disabled value="">Selecione o estado...</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                            </div>
+
+                            <!-- Campo Cidade -->
+                            <div class="mb-4">
+                                <label for="cidade" class="form-label">Cidade</label>
+                                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Nome da cidade" required>
+                            </div>
+
+                            <!-- Botão de Envio -->
+                            <div class="d-grid mt-5">
+                                <button type="submit" class="btn btn-success">Cadastrar Fazenda</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -25,5 +25,7 @@ from emityma import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home' ),
-    path('', include('usuario.urls')),    
+    path('', include('usuario.urls')),
+    path('dashboard/', include('dashboard.urls')),
+    path('', include('core.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -183,20 +183,32 @@ p {
   color: #fff;
 }
 
+
+/* Color Theme Swatches in Hex 
+.color-theme_Post-Quake-Farming-col-1-hex { color: #014040; }
+.color-theme_Post-Quake-Farming-col-1-hex { color: #1B7130; }
+.color-theme_Post-Quake-Farming-col-2-hex { color: #20734C; }
+.color-theme_Post-Quake-Farming-col-3-hex { color: #4CA649; }
+.color-theme_Post-Quake-Farming-col-4-hex { color: #E0F2DF; }
+.color-theme_Post-Quake-Farming-col-5-hex { color: #F2F2F2; } */
+
+
+
 .gradient-1 {
-  background-image: linear-gradient(#6240c8 0%, #a145fe 100%);
+  background-image: linear-gradient(#014040 0%, #07a7a7 100%);
 }
 
 .gradient-2 {
-  background-image: linear-gradient(#b548f2 0%, #d283fd 100%);
+  
+  background-image: linear-gradient(#20734C 0%, #37c583 100%);
 }
 
 .gradient-3 {
-  background-image: linear-gradient(#e44e83 0%, #ffb8d1 100%);
+  background-image: linear-gradient(#1B7130 0%, #33db5d 100%);
 }
 
 .gradient-4 {
-  background-image: linear-gradient(#40b4f6 0%, #79cefd 100%);
+  background-image: linear-gradient(#4CA649 0%, #66f55e 100%);
 }
 
 .scroll-top {
@@ -239,7 +251,7 @@ p {
   font-size: 25px;
   font-weight: 600;
   display: block;
-  color: #E44E83;
+  color: #1B7130;
   margin-bottom: 12px;
 }
 
@@ -1780,7 +1792,7 @@ p {
   width: 211px;
   height: 211px;
   border-radius: 50%;
-  background: linear-gradient(#b548f2 0%, #d283fd 100%);
+  background: linear-gradient(#016363 0%, #07a7a7 100%);
 }
 
 .counterup-section .counter-wrapper::before {
@@ -1843,7 +1855,7 @@ p {
 
 .subscribe-section .subscribe-wrapper {
   border-radius: 30px;
-  background: linear-gradient(to right bottom, #6240c8 0%, #a145fe 100%);
+  background: linear-gradient(to right, #4CA649, #20734C, #1B7130);
   position: relative;
   overflow: hidden;
   z-index: 1;
