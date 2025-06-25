@@ -18,7 +18,7 @@ O objetivo do Emityma é oferecer uma solução integrada para produtores rurais
 - **Financeiro**: Registre receitas e despesas, com categorização e geração de relatórios.
 - **Usuários e Permissões**: Sistema de autenticação com diferentes níveis de acesso.
 
-## 🗂️ Modelo Conceitual
+## 🗂️ Modelo Conceitual (Provisório)
 
 O sistema é estruturado com as seguintes entidades principais:
 
