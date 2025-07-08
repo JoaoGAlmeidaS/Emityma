@@ -2,8 +2,25 @@ from django.urls import path, include
 from dashboard import views
 
 urlpatterns = [
-    path('', views.dashboard, name='dashboard'),  # pré-tela de seleção
-    path('home/', views.dashboard_home, name='dashboard_home'),  # dashboard real da fazenda
+    path('', views.dashboard, name='dashboard'),
+    path('home/', views.dashboard_home, name='dashboard_home'),
     path('core/', include('core.urls')),
     path('<slug:slug>/', views.dashboard_home, name='dashboard_home'),
+    path('fazenda/<slug:slug>/gerenciar/', views.gerenciar_fazenda, name='gerenciar_fazenda'),
+    path('fazenda/<slug:slug>/talhao/editar/', views.editar_talhao, name='editar_talhao'),
+    path('fazenda/<slug:slug>/talhao/excluir/', views.excluir_talhao, name='excluir_talhao'),
+    path('fazenda/<slug:slug>/usuario/buscar/', views.buscar_usuario_por_email, name='buscar_usuario_por_email'),
+    path('fazenda/<slug:slug>/usuario/adicionar/', views.adicionar_usuario_fazenda, name='adicionar_usuario_fazenda'),
+    path('fazenda/<slug:slug>/editar/', views.editar_fazenda, name='editar_fazenda'),
+    path('fazenda/<slug:slug>/usuarios/', views.usuarios_fazenda, name='usuarios_fazenda'),
+    path('fazenda/<slug:slug>/usuarios/editar/', views.editar_usuario_fazenda, name='editar_usuario_fazenda'),
+    path('fazenda/<slug:slug>/usuarios/remover/', views.remover_usuario_fazenda, name='remover_usuario_fazenda'),
+    path('fazenda/<slug:slug>/tarefas/', views.tarefas, name='tarefas'),
+    path('fazenda/<slug:slug>/tarefas/criar/', views.criar_tarefa, name='criar_tarefa'),
+    path('fazenda/<slug:slug>/tarefas/editar/', views.editar_tarefa, name='editar_tarefa'),
+    path('fazenda/<slug:slug>/tarefas/excluir/', views.excluir_tarefa, name='excluir_tarefa'),
+    path('fazenda/<slug:slug>/culturas/', views.culturas, name='culturas'),
+    path('fazenda/<slug:slug>/culturas/criar/', views.criar_cultura, name='criar_cultura'),
+    path('fazenda/<slug:slug>/culturas/editar/', views.editar_cultura, name='editar_cultura'),
+    path('fazenda/<slug:slug>/culturas/excluir/', views.excluir_cultura, name='excluir_cultura'),
 ]

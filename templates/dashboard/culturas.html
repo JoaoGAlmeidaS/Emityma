@@ -1,0 +1,239 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Emityma - Dashboard</title>
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+    <!-- Sidebar/Topbar -->
+    {% include "dashboard/sidebar.html" %}
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">{{ fazenda.nome }} <span class="h5 text-gray-600">- Culturas</span> </h1>
+
+        <!-- Card de ações -->
+        <div class="card mb-4">
+            <div class="card-body d-flex justify-content-center">
+                {% if nivel_acesso != "Operador" %}
+                <button type="button" class="btn btn-warning mx-2" data-toggle="modal" data-target="#modalCultura">
+                    <i class="fas fa-plus"></i> Adicionar Cultura
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- DataTable Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-success">Culturas</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Tipo de Cultura</th>
+                                <th>Descrição</th>
+                                <th>Produtividade Média</th>
+                                {% if nivel_acesso != "Operador" %}
+                                <th>Editar</th>
+                                {% endif %}
+                                <th>Excluir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if culturas %}
+                                {% for cultura in culturas %}
+                                <tr>
+                                    <td>{{ cultura.nome }}</td>
+                                    <td>{{ cultura.tipo_cultura }}</td>
+                                    <td>{{ cultura.descricao }}</td>
+                                    <td>{{ cultura.produtividade_media }}</td>
+                                    {% if nivel_acesso != "Operador" %}
+                                    <td>
+                                        <button 
+                                            type="button"
+                                            class="btn btn-sm btn-link"
+                                            title="Editar"
+                                            data-toggle="modal"
+                                            data-target="#modalEditarCultura"
+                                            data-id="{{ cultura.id }}"
+                                            data-nome="{{ cultura.nome }}"
+                                            data-tipo_cultura="{{ cultura.tipo_cultura }}"
+                                            data-descricao="{{ cultura.descricao }}"
+                                            data-produtividade_media="{{ cultura.produtividade_media }}">
+                                            <i class="fas fa-edit text-primary"></i>
+                                        </button>
+                                    </td>
+                                    {% endif %}
+                                    <td>
+                                        <form method="post" action="{% url 'excluir_cultura' slug=fazenda.slug %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="cultura_id" value="{{ cultura.id }}">
+                                            <button 
+                                                type="submit"
+                                                class="btn btn-sm btn-link"
+                                                title="Excluir">
+                                                <i class="fas fa-trash-alt text-danger"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="{% if nivel_acesso != 'Operador' %}6{% else %}5{% endif %}" class="text-center">
+                                        Nenhuma cultura cadastrada.<br>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+    <!-- Modal Cadastro Cultura -->
+    <div class="modal fade" id="modalCultura" tabindex="-1" role="dialog" aria-labelledby="modalCulturaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{% url 'criar_cultura' slug=fazenda.slug %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCulturaLabel">Cadastrar Cultura</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="nome">Nome</label>
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome da cultura" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_cultura">Tipo de Cultura</label>
+                            <select class="form-control" id="tipo_cultura" name="tipo_cultura" required>
+                                <option value="" disabled selected>Selecione...</option>
+                                <option value="GC">Gramínea Cereal</option>
+                                <option value="GR">Gramínea Forrageira</option>
+                                <option value="LG">Leguminosa</option>
+                                <option value="PC">Planta de Cobertura</option>
+                                <option value="FR">Frutífera</option>
+                                <option value="FB">Fibra</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" id="descricao" name="descricao" placeholder="Descrição da cultura" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="produtividade_media">Produtividade Média</label>
+                            <input type="number" step="0.01" class="form-control" id="produtividade_media" name="produtividade_media" placeholder="Produtividade média" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Cultura -->
+    <div class="modal fade" id="modalEditarCultura" tabindex="-1" role="dialog" aria-labelledby="modalEditarCulturaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{% url 'editar_cultura' slug=fazenda.slug %}">
+                {% csrf_token %}
+                <input type="hidden" id="edit-cultura-id" name="cultura_id">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarCulturaLabel">Editar Cultura</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="edit-nome">Nome</label>
+                            <input type="text" class="form-control" id="edit-nome" name="nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-tipo_cultura">Tipo de Cultura</label>
+                            <select class="form-control" id="edit-tipo_cultura" name="tipo_cultura" required>
+                                <option value="GC">Gramínea Cereal</option>
+                                <option value="GR">Gramínea Forrageira</option>
+                                <option value="LG">Leguminosa</option>
+                                <option value="PC">Planta de Cobertura</option>
+                                <option value="FR">Frutífera</option>
+                                <option value="FB">Fibra</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-descricao">Descrição</label>
+                            <textarea class="form-control" id="edit-descricao" name="descricao" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-produtividade_media">Produtividade Média</label>
+                            <input type="number" step="0.01" class="form-control" id="edit-produtividade_media" name="produtividade_media" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+    <!-- Scripts para os modals de edição -->
+    <script>
+        // Preencher modal de edição
+        $('#modalEditarCultura').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var culturaId = button.data('id');
+            var nome = button.data('nome');
+            var tipoCultura = button.data('tipo_cultura');
+            var descricao = button.data('descricao');
+            var produtividadeMedia = button.data('produtividade_media');
+
+            var modal = $(this);
+            modal.find('#edit-cultura-id').val(culturaId);
+            modal.find('#edit-nome').val(nome);
+            modal.find('#edit-tipo_cultura').val(tipoCultura);
+            modal.find('#edit-descricao').val(descricao);
+            modal.find('#edit-produtividade_media').val(produtividadeMedia);
+        });
+    </script>
+
+</body>
+</html>

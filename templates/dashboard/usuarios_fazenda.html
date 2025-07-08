@@ -1,0 +1,312 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Emityma - Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+
+        <!-- Sidebar/Topbar -->
+        {% include "dashboard/sidebar.html" %}
+    
+
+        
+                <!-- Begin Page Content -->
+            <div class="container-fluid">
+            <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">{{ fazenda.nome }} <span class="h5 text-gray-600">- Gerenciamento</span> </h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-success">Usuários</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Email</th>
+                                            <th>Nível de Acesso</th>
+                                            <th>Editar</th>
+                                            <th>Remover</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if usuarios %}
+                                            {% for usuario_fazenda in usuarios %}
+                                            <tr>
+                                                <td>{{ usuario_fazenda.usuario.usuario_nome }}</td>
+                                                <td>{{ usuario_fazenda.usuario.usuario_email }}</td>
+                                                <td>
+                                                    {% if usuario_fazenda.nivel_acesso == "AD" %}Administrador
+                                                    {% elif usuario_fazenda.nivel_acesso == "GE" %}Gerente
+                                                    {% elif usuario_fazenda.nivel_acesso == "OP" %}Operador
+                                                    {% else %}{{ usuario_fazenda.nivel_acesso }}{% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if usuario_fazenda.usuario.usuario_id != usuario.usuario_id %}
+                                                    <button 
+                                                        type="button"
+                                                        class="btn btn-sm btn-link"
+                                                        title="Editar"
+                                                        data-toggle="modal"
+                                                        data-target="#modalEditarUsuario"
+                                                        data-id="{{ usuario_fazenda.id }}"
+                                                        data-nome="{{ usuario_fazenda.usuario.usuario_nome }}"
+                                                        data-email="{{ usuario_fazenda.usuario.usuario_email }}"
+                                                        data-nivel="{{ usuario_fazenda.nivel_acesso }}">
+                                                        <i class="fas fa-edit text-primary"></i>
+                                                    </button>
+                                                    {% else %}
+                                                    <button 
+                                                        type="button"
+                                                        class="btn btn-sm btn-link disabled"
+                                                        title="Você não pode editar a si mesmo"
+                                                        tabindex="-1"
+                                                        aria-disabled="true"
+                                                        style="pointer-events: none; opacity: 0.5;">
+                                                        <i class="fas fa-edit text-muted"></i>
+                                                    </button>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if usuario_fazenda.usuario.usuario_id != usuario.usuario_id %}
+                                                    <button 
+                                                        type="button"
+                                                        class="btn btn-sm btn-link"
+                                                        title="Remover"
+                                                        data-toggle="modal"
+                                                        data-target="#modalRemoverUsuario"
+                                                        data-id="{{ usuario_fazenda.id }}">
+                                                        <i class="fas fa-trash-alt text-danger"></i>
+                                                    </button>
+                                                    {% else %}
+                                                    <button 
+                                                        type="button"
+                                                        class="btn btn-sm btn-link disabled"
+                                                        title="Você não pode remover a si mesmo"
+                                                        tabindex="-1"
+                                                        aria-disabled="true"
+                                                        style="pointer-events: none; opacity: 0.5;">
+                                                        <i class="fas fa-trash-alt text-muted"></i>
+                                                    </button>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="5" class="text-center">
+                                                    Nenhum usuário associado à fazenda.
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Emityma</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pronto para Sair?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Selecione "Sair" abaixo se quiser encerrar a sessão.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-success" href="{% url 'sair' %}">Sair</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<!-- Modal Editar Usuário -->
+<div class="modal fade" id="modalEditarUsuario" tabindex="-1" role="dialog" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" action="{% url 'editar_usuario_fazenda' slug=fazenda.slug %}">
+            {% csrf_token %}
+            <input type="hidden" id="editar-usuario-id" name="usuario_fazenda_id">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar Usuário da Fazenda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editar-usuario-nome">Nome</label>
+                        <input type="text" class="form-control" id="editar-usuario-nome" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editar-usuario-email">Email</label>
+                        <input type="email" class="form-control" id="editar-usuario-email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editar-nivel-acesso">Nível de Acesso</label>
+                        <select class="form-control" id="editar-nivel-acesso" name="nivel_acesso" required>
+                            <option value="AD">Administrador</option>
+                            <option value="GE">Gerente</option>
+                            <option value="OP">Operador</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Modal Remover Usuário -->
+<div class="modal fade" id="modalRemoverUsuario" tabindex="-1" role="dialog" aria-labelledby="modalRemoverUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" action="{% url 'remover_usuario_fazenda' slug=fazenda.slug %}">
+            {% csrf_token %}
+            <input type="hidden" id="remover-usuario-id" name="usuario_fazenda_id">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalRemoverUsuarioLabel">Remover Usuário da Fazenda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="font-weight-bold text-danger">Tem certeza que deseja remover este usuário da fazenda? Esta ação não poderá ser desfeita.</p>
+                    <div class="form-group">
+                        <label for="remover-usuario-nome">Nome</label>
+                        <input type="text" class="form-control" id="remover-usuario-nome" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="remover-usuario-email">Email</label>
+                        <input type="email" class="form-control" id="remover-usuario-email" readonly>
+                    </div>
+                    <div class="form-group form-check mt-3">
+                        <input type="checkbox" class="form-check-input" id="confirmar-remocao-usuario" required>
+                        <label class="form-check-label text-danger" for="confirmar-remocao-usuario">
+                            Sim, desejo remover este usuário.
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Remover</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/dashboard.js' %}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+    <!-- Scripts para os modals de edição -->
+    <script>
+        $('#modalEditarUsuario').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var usuarioId = button.data('id');
+            var nome = button.data('nome');
+            var email = button.data('email');
+            var nivel = button.data('nivel');
+
+            var modal = $(this);
+            modal.find('#editar-usuario-id').val(usuarioId);
+            modal.find('#editar-usuario-nome').val(nome);
+            modal.find('#editar-usuario-email').val(email);
+            modal.find('#editar-nivel-acesso').val(nivel);
+        });
+
+
+        $('#modalRemoverUsuario').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var usuarioId = button.data('id');
+            var nome = button.closest('tr').find('td').eq(0).text();
+            var email = button.closest('tr').find('td').eq(1).text();
+
+            var modal = $(this);
+            modal.find('#remover-usuario-id').val(usuarioId);
+            modal.find('#remover-usuario-nome').val(nome);
+            modal.find('#remover-usuario-email').val(email);
+        });
+    </script>
+
+</body>
+
+</html>

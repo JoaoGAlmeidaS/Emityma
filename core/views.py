@@ -17,7 +17,6 @@ def criar_fazenda(request):
         telefone = request.POST.get('telefone')
         tamanho = request.POST.get('tamanho')
 
-        # Cria a fazenda
         fazenda = Fazenda.objects.create(
             nome=nome,
             proprietario=proprietario,
@@ -28,12 +27,11 @@ def criar_fazenda(request):
             tamanho=tamanho
         )
 
-        # Relaciona o usuário à fazenda com nível de acesso (exemplo: 'admin')
         usuario = Usuario.objects.get(usuario_id=usuario_id)
         UsuarioFazenda.objects.create(
             fazenda=fazenda,
             usuario=usuario,
-            nivel_acesso='admin'
+            nivel_acesso='Administrador'
         )
 
         return redirect('dashboard')  # Redirecione para onde desejar após o cadastro

@@ -1,0 +1,266 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Emityma - Dashboard</title>
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+    <!-- Sidebar/Topbar -->
+    {% include "dashboard/sidebar.html" %}
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">{{ fazenda.nome }} <span class="h5 text-gray-600">- Tarefas</span> </h1>
+
+        <!-- Card de ações -->
+        <div class="card mb-4">
+            <div class="card-body d-flex justify-content-center">
+                {% if nivel_acesso != "Operador" %}
+                <button type="button" class="btn btn-warning mx-2" data-toggle="modal" data-target="#modalTarefa">
+                    <i class="fas fa-plus"></i> Adicionar Tarefa
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-success">Tarefas</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Descrição</th>
+                                <th>Prioridade</th>
+                                <th>Data de Solicitação</th>
+                                {% if nivel_acesso != "Operador" %}
+                                <th>Editar</th>
+                                {% endif %}
+                                <th>Concluir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if tarefas %}
+                                {% for tarefa in tarefas %}
+                                <tr>
+                                    <td>{{ tarefa.titulo }}</td>
+                                    <td>{{ tarefa.descricao }}</td>
+                                    <td>
+                                        {% if tarefa.prioridade == "U" %}Urgente
+                                        {% elif tarefa.prioridade == "A" %}Alta
+                                        {% elif tarefa.prioridade == "M" %}Média
+                                        {% elif tarefa.prioridade == "B" %}Baixa
+                                        {% else %}{{ tarefa.prioridade }}{% endif %}
+                                    </td>
+                                    <td>{{ tarefa.dt_solicitacao|date:"d/m/Y" }}</td>
+                                    {% if nivel_acesso != "Operador" %}
+                                    <td>
+                                        <button 
+                                            type="button"
+                                            class="btn btn-sm btn-link"
+                                            title="Editar"
+                                            data-toggle="modal"
+                                            data-target="#modalEditarTarefa"
+                                            data-id="{{ tarefa.id }}"
+                                            data-titulo="{{ tarefa.titulo }}"
+                                            data-descricao="{{ tarefa.descricao }}"
+                                            data-prioridade="{{ tarefa.prioridade }}">
+                                            <i class="fas fa-edit text-primary"></i>
+                                        </button>
+                                    </td>
+                                    {% endif %}
+                                    <td>
+                                        <form method="post" action="{% url 'excluir_tarefa' slug=fazenda.slug %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="tarefa_id" value="{{ tarefa.id }}">
+                                            <button 
+                                                type="submit"
+                                                class="btn btn-sm btn-link"
+                                                title="Concluir">
+                                                <i class="fas fa-check-circle text-success"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="{% if nivel_acesso != 'Operador' %}6{% else %}5{% endif %}" class="text-center">
+                                        Nenhuma tarefa cadastrada.<br>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+    <!-- Modal Cadastro Tarefa -->
+    <div class="modal fade" id="modalTarefa" tabindex="-1" role="dialog" aria-labelledby="modalTarefaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{% url 'criar_tarefa' slug=fazenda.slug %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTarefaLabel">Cadastrar Tarefa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="titulo">Título</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título da tarefa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" id="descricao" name="descricao" placeholder="Descrição da tarefa" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="prioridade">Prioridade</label>
+                            <select class="form-control" id="prioridade" name="prioridade" required>
+                                <option value="U">Urgente</option>
+                                <option value="A">Alta</option>
+                                <option value="M">Média</option>
+                                <option value="B">Baixa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Tarefa -->
+    <div class="modal fade" id="modalEditarTarefa" tabindex="-1" role="dialog" aria-labelledby="modalEditarTarefaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{% url 'editar_tarefa' slug=fazenda.slug %}">
+                {% csrf_token %}
+                <input type="hidden" id="edit-tarefa-id" name="tarefa_id">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarTarefaLabel">Editar Tarefa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="edit-titulo">Título</label>
+                            <input type="text" class="form-control" id="edit-titulo" name="titulo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-descricao">Descrição</label>
+                            <textarea class="form-control" id="edit-descricao" name="descricao" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-prioridade">Prioridade</label>
+                            <select class="form-control" id="edit-prioridade" name="prioridade" required>
+                                <option value="U">Urgente</option>
+                                <option value="A">Alta</option>
+                                <option value="M">Média</option>
+                                <option value="B">Baixa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Excluir Tarefa -->
+    <div class="modal fade" id="modalExcluirTarefa" tabindex="-1" role="dialog" aria-labelledby="modalExcluirTarefaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{% url 'excluir_tarefa' slug=fazenda.slug %}">
+                {% csrf_token %}
+                <input type="hidden" id="excluir-tarefa-id" name="tarefa_id">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalExcluirTarefaLabel">Excluir Tarefa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Tem certeza que deseja excluir esta tarefa?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+    <!-- Scripts para os modals de edição -->
+    <script>
+        // Preencher modal de edição
+        $('#modalEditarTarefa').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var tarefaId = button.data('id');
+            var titulo = button.data('titulo');
+            var descricao = button.data('descricao');
+            var prioridade = button.data('prioridade');
+            var status = button.data('status');
+
+            var modal = $(this);
+            modal.find('#edit-tarefa-id').val(tarefaId);
+            modal.find('#edit-titulo').val(titulo);
+            modal.find('#edit-descricao').val(descricao);
+            modal.find('#edit-prioridade').val(prioridade);
+            modal.find('#edit-status').val(status);
+        });
+
+        // Preencher modal de exclusão
+        $('#modalExcluirTarefa').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var tarefaId = button.data('id');
+            var modal = $(this);
+            modal.find('#excluir-tarefa-id').val(tarefaId);
+        });
+    </script>
+
+</body>
+</html>
