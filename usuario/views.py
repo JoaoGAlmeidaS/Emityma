@@ -8,7 +8,6 @@ def entrar(request):
         senha = request.POST.get('senha')
         try:
             usuario = Usuario.objects.get(usuario_email=email, usuario_senha=senha)
-            # Aqui você pode salvar o ID do usuário na sessão, se quiser
             request.session['usuario_id'] = usuario.usuario_id
             return redirect('/dashboard/')
         except Usuario.DoesNotExist:
@@ -20,8 +19,8 @@ def cadastrar(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
-        senha = request.POST.get('senhav')
-        # Verifica se já existe usuário com mesmo nome ou email
+        senha = request.POST.get('senha')
+        
         if Usuario.objects.filter(usuario_nome=username).exists():
             return render(request, 'cadastro/cadastro.html', {'error': 'Usuário já existe'})
         if Usuario.objects.filter(usuario_email=email).exists():

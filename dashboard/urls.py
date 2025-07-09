@@ -23,4 +23,9 @@ urlpatterns = [
     path('fazenda/<slug:slug>/culturas/criar/', views.criar_cultura, name='criar_cultura'),
     path('fazenda/<slug:slug>/culturas/editar/', views.editar_cultura, name='editar_cultura'),
     path('fazenda/<slug:slug>/culturas/excluir/', views.excluir_cultura, name='excluir_cultura'),
+    path('fazenda/<slug:slug>/plantios/', views.plantios, name='plantios'),
+    path('fazenda/<slug:slug>/plantio/cadastrar/', views.criar_plantio, name='criar_plantio'),
+    path('fazenda/<slug:slug>/plantios/editar/', views.editar_plantio, name='editar_plantio'),
+    path('fazenda/<slug:slug>/plantios/excluir/', views.excluir_plantio, name='excluir_plantio'),
+    path('fazenda/<slug:slug>/colheita/', views.colheita, name='colheita'),
 ]

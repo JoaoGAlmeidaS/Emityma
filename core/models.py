@@ -10,7 +10,7 @@ class Fazenda(models.Model):
     cidade          = models.CharField(max_length=50, verbose_name="Cidade")
     email           = models.EmailField(max_length=50, verbose_name="Email")
     telefone        = models.CharField(max_length=30, verbose_name="Telefone")
-    tamanho         = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Tamanho (ha)")
+    tamanho         = models.FloatField(max_length=20, verbose_name="Tamanho (ha)")
     slug            = models.SlugField(max_length=60, unique=True, blank=True)
 
     def save(self, *args, **kwargs):
@@ -45,8 +45,17 @@ class UsuarioFazenda(models.Model):
         return f"{self.usuario} - {self.fazenda} ({self.nivel_acesso})"
 
 class Cultura(models.Model):
+    TIPO_CULTURA_CHOICES = [
+        ('GC', 'Gramínea Cereal'),
+        ('GR', 'Gramínea Forrageira'),
+        ('LG', 'Leguminosa'),
+        ('PC', 'Planta de Cobertura'),
+        ('FR', 'Frutífera'),
+        ('FB', 'Fibra'),
+    ]
+
     nome                = models.CharField(max_length=50)
-    tp_cultura          = models.CharField(max_length=2)  # GC, GR, LG, PC, FR, FB
+    tp_cultura          = models.CharField(max_length=2, choices=TIPO_CULTURA_CHOICES)  # GC, GR, LG, PC, FR, FB
     descricao           = models.CharField(max_length=500)
     produtividade_media = models.FloatField(help_text="kg por hectare")
     fazenda             = models.ForeignKey(Fazenda, on_delete=models.CASCADE, related_name='culturas')

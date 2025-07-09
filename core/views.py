@@ -6,7 +6,7 @@ def criar_fazenda(request):
     usuario_id = request.session.get('usuario_id')
     usuario = Usuario.objects.get(usuario_id=usuario_id) if usuario_id else None
     if not usuario_id:
-        return redirect('entrar')  # Redireciona para login se não estiver logado
+        return redirect('entrar')
 
     if request.method == 'POST':
         nome = request.POST.get('nome')
@@ -34,6 +34,6 @@ def criar_fazenda(request):
             nivel_acesso='Administrador'
         )
 
-        return redirect('dashboard')  # Redirecione para onde desejar após o cadastro
+        return redirect('dashboard')
 
     return render(request, 'core/criar_fazenda.html', {'usuario': usuario, 'show_dashboard_btn': True})

@@ -74,9 +74,9 @@
                                             <tr>
                                                 <td>{{ talhao.nome }}</td>
                                                 <td>{{ talhao.area }}</td>
-                                                <td>{{ talhao.qtd_culturas|default:"0" }}</td>
+                                                <td>{{ talhao.qtd_cultura|default:"0" }}</td>
                                                 <td>
-                                                    {% if talhao.qtd_plantios > 0 %}
+                                                    {% if talhao.qtd_cultura > 0 %}
                                                         Sim
                                                     {% else %}
                                                         Não
@@ -278,7 +278,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Etapa 1: Inserir e-mail -->
                     <div id="etapa-email">
                         <div class="form-group">
                             <label for="usuario-email">E-mail do Usuário</label>
@@ -287,7 +286,7 @@
                         <button type="button" class="btn btn-success" id="buscar-usuario">Buscar</button>
                     </div>
 
-                    <!-- Etapa 2: Confirmação -->
+                    
                     <div id="etapa-confirmacao" style="display:none;">
                         <p>Confirme o usuário a ser adicionado:</p>
                         <div class="form-group">
@@ -310,7 +309,6 @@
                         <button type="button" class="btn btn-success" id="confirmar-adicao">Confirmar</button>
                     </div>
 
-                    <!-- Etapa 3: Confirmação final -->
                     <div id="etapa-final" style="display:none;">
                         <p class="mb-3">Tem certeza que deseja adicionar este usuário à fazenda com o nível de acesso selecionado?</p>
                         <button type="button" class="btn btn-secondary" id="voltar-confirmacao">Voltar</button>

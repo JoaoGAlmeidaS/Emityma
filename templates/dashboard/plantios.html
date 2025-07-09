@@ -1,0 +1,240 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Emityma - Dashboard</title>
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+    <!-- Sidebar/Topbar -->
+    {% include "dashboard/sidebar.html" %}
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">{{ fazenda.nome }} <span class="h5 text-gray-600">- Plantios</span> </h1>
+
+        <!-- DataTable Example -->
+        <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-success">Plantios</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Cultura</th>
+                            <th>Tipo</th>
+                            <th>Talhão</th>
+                            <th>Data de Plantio</th>
+                            <th>Colheita Prevista</th>
+                            <th>Editar</th>
+                            <th>Excluir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if plantios %}
+                            {% for plantio in plantios %}
+                            <tr>
+                                <td>{{ plantio.cultura.nome }}</td>
+                                <td>{{ plantio.cultura.get_tp_cultura_display }}</td>
+                                <td>{{ plantio.talhao.nome }}</td>
+                                <td>{{ plantio.dt_plantio|date:"d/m/Y" }}</td>
+                                <td>{{ plantio.dt_colheitaPrevista|date:"d/m/Y" }}</td>
+                                <td>
+                                    <button 
+                                        type="button"
+                                        class="btn btn-sm btn-link"
+                                        title="Editar"
+                                        data-toggle="modal"
+                                        data-target="#modalEditarPlantio"
+                                        data-id="{{ plantio.id }}"
+                                        data-cultura="{{ plantio.cultura.id }}"
+                                        data-talhao="{{ plantio.talhao.id }}"
+                                        data-dt_plantio="{{ plantio.dt_plantio|date:'Y-m-d' }}"
+                                        data-dt_colheita="{{ plantio.dt_colheitaPrevista|date:'Y-m-d' }}">
+                                        <i class="fas fa-edit text-primary"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <form method="post" action="{% url 'excluir_plantio' slug=fazenda.slug %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="plantio_id" value="{{ plantio.id }}">
+                                        <button 
+                                            type="submit"
+                                            class="btn btn-sm btn-link"
+                                            title="Excluir">
+                                            <i class="fas fa-trash-alt text-danger"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="{% if nivel_acesso != 'Operador' %}7{% else %}6{% endif %}" class="text-center">
+                                    Nenhum plantio cadastrado.<br>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.container-fluid -->
+
+    <!-- Card de ações -->
+        <div class="card mb-4">
+            <div class="card-body d-flex justify-content-center">
+                <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#modalCadastrarPlantio">
+                    <i class="fas fa-plus"></i> Novo Plantio
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Modal Cadastro Plantio -->
+    <div class="modal fade" id="modalCadastrarPlantio" tabindex="-1" role="dialog" aria-labelledby="modalCadastrarPlantioLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{% url 'criar_plantio' slug=fazenda.slug %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCadastrarPlantioLabel">Cadastrar Plantio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="cultura">Cultura</label>
+                            <select class="form-control" id="cultura" name="cultura_id" required>
+                                <option value="" disabled selected>Selecione a cultura...</option>
+                                {% for cultura in culturas %}
+                                    <option value="{{ cultura.id }}">{{ cultura.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="talhao">Talhão</label>
+                            <select class="form-control" id="talhao" name="talhao_id" required>
+                                <option value="" disabled selected>Selecione o talhão...</option>
+                                {% for talhao in talhoes %}
+                                    <option value="{{ talhao.id }}">{{ talhao.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dt_plantio">Data de Plantio</label>
+                            <input type="date" class="form-control" id="dt_plantio" name="dt_plantio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dt_colheitaPrevista">Data Prevista da Colheita</label>
+                            <input type="date" class="form-control" id="dt_colheitaPrevista" name="dt_colheitaPrevista" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Modal Editar Plantio -->
+    <div class="modal fade" id="modalEditarPlantio" tabindex="-1" role="dialog" aria-labelledby="modalEditarPlantioLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{% url 'editar_plantio' slug=fazenda.slug %}">
+                {% csrf_token %}
+                <input type="hidden" id="edit-plantio-id" name="plantio_id">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Plantio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="edit-cultura">Cultura</label>
+                            <select class="form-control" id="edit-cultura" name="cultura_id" required>
+                                {% for cultura in culturas %}
+                                    <option value="{{ cultura.id }}">{{ cultura.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-talhao">Talhão</label>
+                            <select class="form-control" id="edit-talhao" name="talhao_id" required>
+                                {% for talhao in talhoes %}
+                                    <option value="{{ talhao.id }}">{{ talhao.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-dt_plantio">Data de Plantio</label>
+                            <input type="date" class="form-control" id="edit-dt_plantio" name="dt_plantio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-dt_colheitaPrevista">Data Prevista da Colheita</label>
+                            <input type="date" class="form-control" id="edit-dt_colheitaPrevista" name="dt_colheitaPrevista" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+
+    <script>
+        $('#modalEditarPlantio').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var culturaId = button.data('cultura');
+            var talhaoId = button.data('talhao');
+            var dtPlantio = button.data('dt_plantio');
+            var dtColheita = button.data('dt_colheita');
+
+            var modal = $(this);
+            modal.find('#edit-plantio-id').val(id);
+            modal.find('#edit-cultura').val(culturaId);
+            modal.find('#edit-talhao').val(talhaoId);
+            modal.find('#edit-dt_plantio').val(dtPlantio);
+            modal.find('#edit-dt_colheitaPrevista').val(dtColheita);
+        });
+    </script>
+
+</body>
+</html>
