@@ -1,271 +1,301 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
 
-{% load static l10n humanize %}
+{% block title %}Dashboard{% endblock %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">{{ fazenda.nome }} <span class="h6 text-gray-600">{{ fazenda.cidade }} · {{ fazenda.uf }}</span></h1>
+    <span class="small text-gray-600">Situação em {% now "d/m/Y" %}</span>
+</div>
 
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Emityma - Dashboard</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
-
-</head>
-
-<body id="page-top">
-
-
-        <!-- Sidebar/Topbar -->
-        {% include "dashboard/sidebar.html" %}
-    
-
-        
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">{{ fazenda.nome }} <span class="h6 text-gray-600">{{ fazenda.uf }}</span> </h1>
+{# ------------------------------------------------------------ indicadores #}
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Área em produção</div>
+                        <div class="h5 mb-1 font-weight-bold text-gray-800">{{ area_em_uso|floatformat:"-1g" }} <span class="small text-gray-600">de {{ area_talhoes|floatformat:"-1g" }} ha</span></div>
+                        <div class="progress progress-sm mb-1">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentual_em_uso }}%"
+                                aria-label="Área dos talhões em produção" aria-valuenow="{{ percentual_em_uso }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="small text-gray-600">{{ percentual_em_uso }}% dos talhões · talhões cobrem {{ percentual_mapeado }}% da fazenda</div>
                     </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total de Talhões</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_talhoes }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Culturas Plantadas</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ culturas_plantadas }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-leaf fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Produção Total Estimada (kg)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="producao-estimada-js">{{ producao_estimada }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Plantios Ativos</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ plantios_ativos }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-auto">
+                        <i class="fas fa-map fa-2x text-gray-300" aria-hidden="true"></i>
                     </div>
-
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
-                            <!-- Project Card Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-success">Tarefas: {{ total_tarefas }}</h6>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="small font-weight-bold">Urgente: {{ tarefas_urgente }} <span class="float-right">{{ urgente_percentual }}%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ urgente_percentual }}%"
-                                            aria-valuenow="{{ urgente_percentual }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-
-                                    <h4 class="small font-weight-bold">Alta {{ tarefas_alta }} <span class="float-right">{{ alta_percentual }}%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ alta_percentual }}%"
-                                            aria-valuenow="{{ alta_percentual }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-
-                                    <h4 class="small font-weight-bold">Média {{ tarefas_media }} <span class="float-right">{{ media_percentual }}%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ media_percentual }}%"
-                                            aria-valuenow="{{ media_percentual }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-
-                                    <h4 class="small font-weight-bold">Baixa {{ tarefas_baixa }} <span class="float-right">{{ baixa_percentual }}%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ baixa_percentual }}%"
-                                            aria-valuenow="{{ baixa_percentual }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-success">Cultura por Área</h6>
-                                </div>
-                                <div class="card-body">
-                                    {% if culturas_plantadas > 0 %}
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    {% else %}
-                                    <div class="text-center pt-5 pb-5">
-                                        <i class="fas fa-leaf fa-2x text-gray-300 mb-3"></i>
-                                        <p class="text-muted">Nenhuma cultura plantada ainda.</p>
-                                    </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Pronto para Sair?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Selecione "Sair" abaixo se quiser encerrar a sessão.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-success" href="{% url 'sair' %}">Sair</a>
                 </div>
             </div>
         </div>
     </div>
 
-    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Produção prevista</div>
+                        <div class="h5 mb-1 font-weight-bold text-gray-800">{{ producao_prevista_t|floatformat:"-1g" }} t</div>
+                        <div class="small text-gray-600">a colher · {{ producao_colhida_t|floatformat:"-1g" }} t já colhidas (estimativa)</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-balance-scale fa-2x text-gray-300" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Plantios em andamento</div>
+                        <div class="h5 mb-1 font-weight-bold text-gray-800">{{ plantios_andamento }}</div>
+                        <div class="small text-gray-600">{{ plantios_planejados }} planejado{{ plantios_planejados|pluralize }} · {{ plantios_colhidos }} colhido{{ plantios_colhidos|pluralize }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-seedling fa-2x text-gray-300" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Próxima colheita</div>
+                        {% if proxima_colheita %}
+                        <div class="h5 mb-1 font-weight-bold text-gray-800">{% include "dashboard/_dias_restantes.html" with dias=proxima_colheita.dias_restantes %}</div>
+                        <div class="small text-gray-600">{{ proxima_colheita.cultura }} · {{ proxima_colheita.talhao }} ({{ proxima_colheita.colheita|date:"d/m" }})</div>
+                        {% else %}
+                        <div class="h5 mb-1 font-weight-bold text-gray-800">—</div>
+                        <div class="small text-gray-600">Nenhum plantio em andamento</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar-check fa-2x text-gray-300" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+{# ------------------------------------------ próximas colheitas + culturas #}
+<div class="row">
+    <div class="col-xl-8 col-lg-7">
+        <section class="card shadow mb-4" aria-labelledby="titulo-colheitas">
+            <div class="card-header py-3">
+                <h2 class="m-0 h6 font-weight-bold text-success" id="titulo-colheitas">Próximas colheitas</h2>
+            </div>
+            <div class="card-body">
+                {% if proximas_colheitas %}
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Cultura</th>
+                                <th scope="col">Talhão</th>
+                                <th scope="col">Colheita</th>
+                                <th scope="col" class="w-25 d-none d-md-table-cell">Ciclo</th>
+                                <th scope="col" class="text-right d-none d-sm-table-cell">Produção est.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for colheita in proximas_colheitas %}
+                            <tr>
+                                <td class="font-weight-bold text-gray-800">{{ colheita.cultura }}<span class="d-sm-none"><br><span class="small font-weight-normal text-gray-600">{{ colheita.producao_t|floatformat:"-1g" }} t</span></span></td>
+                                <td>{{ colheita.talhao }}<br><span class="small text-gray-600">{{ colheita.area|floatformat:"-1g" }} ha</span></td>
+                                <td><span class="text-nowrap">{{ colheita.colheita|date:"d/m/Y" }}</span><br><span class="small text-gray-600">{% include "dashboard/_dias_restantes.html" with dias=colheita.dias_restantes %}<span class="d-md-none"> · {{ colheita.progresso }}% do ciclo</span></span></td>
+                                <td class="align-middle d-none d-md-table-cell">
+                                    <div class="progress progress-sm" title="{{ colheita.progresso }}% do ciclo">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ colheita.progresso }}%"
+                                            aria-label="Ciclo de {{ colheita.cultura }} em {{ colheita.talhao }}" aria-valuenow="{{ colheita.progresso }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <span class="small text-gray-600">{{ colheita.progresso }}%</span>
+                                </td>
+                                <td class="text-right text-nowrap d-none d-sm-table-cell">{{ colheita.producao_t|floatformat:"-1g" }} t</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center text-muted my-4">Nenhum plantio em andamento.</p>
+                {% endif %}
+            </div>
+        </section>
+    </div>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <div class="col-xl-4 col-lg-5">
+        <section class="card shadow mb-4" aria-labelledby="titulo-culturas">
+            <div class="card-header py-3">
+                <h2 class="m-0 h6 font-weight-bold text-success" id="titulo-culturas">Área em produção por cultura</h2>
+            </div>
+            <div class="card-body">
+                {% if cultura_labels %}
+                <div class="chart-pie pt-2 pb-2">
+                    <canvas id="myPieChart" role="img" aria-label="Gráfico do percentual da área em produção por cultura"></canvas>
+                </div>
+                <ul class="sr-only">
+                    {% for label in cultura_labels %}<li>{{ label }}</li>{% endfor %}
+                </ul>
+                {{ cultura_labels|json_script:"cultura-labels" }}
+                {{ cultura_percentuais|json_script:"cultura-percentuais" }}
+                {% else %}
+                <div class="text-center pt-5 pb-5">
+                    <i class="fas fa-leaf fa-2x text-gray-300 mb-3" aria-hidden="true"></i>
+                    <p class="text-muted">Nenhuma cultura em produção agora.</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</div>
 
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'js/dashboard.js' %}"></script>
+{# ------------------------------------------------ produção + tarefas #}
+<div class="row">
+    <div class="col-xl-8 col-lg-7">
+        <section class="card shadow mb-4" aria-labelledby="titulo-producao">
+            <div class="card-header py-3">
+                <h2 class="m-0 h6 font-weight-bold text-success" id="titulo-producao">Produção prevista por cultura</h2>
+            </div>
+            <div class="card-body">
+                {% if producao_por_cultura %}
+                <div class="chart-bar" style="height: calc({{ producao_por_cultura|length }} * 42px + 40px);">
+                    <canvas id="graficoProducao" role="img" aria-label="Gráfico da produção prevista por cultura, em toneladas"></canvas>
+                </div>
+                {{ producao_labels|json_script:"producao-labels" }}
+                {{ producao_valores|json_script:"producao-valores" }}
+                <div class="table-responsive mt-3">
+                    <table class="table table-sm mb-0">
+                        <caption class="small">Produção estimada ainda a colher (plantios em andamento e planejados) e ciclo médio de cada cultura.</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Cultura</th>
+                                <th scope="col" class="text-right">Área</th>
+                                <th scope="col" class="text-right">Produção prevista</th>
+                                <th scope="col" class="text-right">Ciclo médio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for linha in producao_por_cultura %}
+                            <tr>
+                                <td>{{ linha.cultura }}</td>
+                                <td class="text-right text-nowrap">{{ linha.area|floatformat:"-1g" }} ha</td>
+                                <td class="text-right text-nowrap">{{ linha.producao_t|floatformat:"-1g" }} t</td>
+                                <td class="text-right text-nowrap">{{ linha.ciclo_medio }} dias</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center text-muted my-4">Nenhum plantio em andamento ou planejado.</p>
+                {% endif %}
+            </div>
+        </section>
+    </div>
 
-    <!-- Page level plugins -->
-    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+    <div class="col-xl-4 col-lg-5">
+        <section class="card shadow mb-4" aria-labelledby="titulo-tarefas">
+            <div class="card-header py-3">
+                <h2 class="m-0 h6 font-weight-bold text-success" id="titulo-tarefas">Tarefas abertas: {{ total_tarefas }}</h2>
+            </div>
+            <div class="card-body">
+                {% include "dashboard/_barra_prioridade.html" with rotulo="Urgente" quantidade=tarefas_urgente percentual=urgente_percentual cor="danger" %}
+                {% include "dashboard/_barra_prioridade.html" with rotulo="Alta" quantidade=tarefas_alta percentual=alta_percentual cor="warning" %}
+                {% include "dashboard/_barra_prioridade.html" with rotulo="Média" quantidade=tarefas_media percentual=media_percentual cor="info" %}
+                {% include "dashboard/_barra_prioridade.html" with rotulo="Baixa" quantidade=tarefas_baixa percentual=baixa_percentual cor="secondary" %}
+                {% if tarefa_mais_antiga %}
+                <hr>
+                <dl class="mb-0 small">
+                    <dt class="text-gray-600">Aberta há mais tempo</dt>
+                    <dd class="text-gray-800">{{ tarefa_mais_antiga.titulo }} <span class="text-gray-600">({{ tarefa_mais_antiga.dias }} dia{{ tarefa_mais_antiga.dias|pluralize }})</span></dd>
+                    <dt class="text-gray-600">Tempo médio em aberto</dt>
+                    <dd class="text-gray-800 mb-0">{{ idade_media_tarefas }} dia{{ idade_media_tarefas|pluralize }}</dd>
+                </dl>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</div>
 
-    <!-- Page level custom scripts -->
-    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
-    <script>
-        const culturaLabels = {{ cultura_labels|safe }};
-        const culturaPercentuais = {{ cultura_percentuais|safe }};
+{# ------------------------------------------------ talhões + equipe #}
+<div class="row">
+    <div class="col-xl-8 col-lg-7">
+        <section class="card shadow mb-4" aria-labelledby="titulo-talhoes">
+            <div class="card-header py-3">
+                <h2 class="m-0 h6 font-weight-bold text-success" id="titulo-talhoes">Situação dos talhões</h2>
+            </div>
+            <div class="card-body">
+                {% if situacao_talhoes %}
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Talhão</th>
+                                <th scope="col" class="text-right d-none d-sm-table-cell">Área</th>
+                                <th scope="col">Situação</th>
+                                <th scope="col">Cultura</th>
+                                <th scope="col">Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in situacao_talhoes %}
+                            <tr>
+                                <td class="font-weight-bold text-gray-800">{{ item.talhao }}</td>
+                                <td class="text-right text-nowrap d-none d-sm-table-cell">{{ item.area|floatformat:"-1g" }} ha</td>
+                                <td>
+                                    {% if item.status == "andamento" %}<span class="badge badge-success">Em produção</span>
+                                    {% elif item.status == "planejado" %}<span class="badge badge-info">Plantio planejado</span>
+                                    {% else %}<span class="badge badge-secondary">Livre</span>{% endif %}
+                                </td>
+                                <td>{{ item.cultura|default:"—" }}</td>
+                                <td>{% if item.data %}<span class="small text-gray-600">{{ item.rotulo_data }}:</span> {{ item.data|date:"d/m/Y" }}{% else %}—{% endif %}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center text-muted my-4">Nenhum talhão cadastrado.</p>
+                {% endif %}
+            </div>
+        </section>
+    </div>
 
-        // Formata o numero pro br
-        document.addEventListener('DOMContentLoaded', function() {
-            const elementoNumero = document.getElementById('producao-estimada-js');
+    <div class="col-xl-4 col-lg-5">
+        <section class="card shadow mb-4" aria-labelledby="titulo-equipe">
+            <div class="card-header py-3">
+                <h2 class="m-0 h6 font-weight-bold text-success" id="titulo-equipe">Equipe: {{ equipe_total }} pessoa{{ equipe_total|pluralize }}</h2>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for nivel, quantidade in equipe_niveis %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        {{ nivel }}{% if nivel == nivel_acesso %} <span class="small text-gray-600">(seu nível)</span>{% endif %}
+                        <span class="badge badge-pill badge-light border">{{ quantidade }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
 
-            if (elementoNumero) {
-                const valorRaw = elementoNumero.textContent;
-
-                const numero = parseFloat(valorRaw);
-
-                const formatador = new Intl.NumberFormat('pt-BR', {
-                    style: 'decimal',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                elementoNumero.textContent = formatador.format(numero);
-            }
-        });
-    </script>
-    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
-
-    
-
-</body>
-
-</html>
+{% block scripts %}
+{% if cultura_labels or producao_por_cultura %}
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'js/dashboard-charts.js' %}"></script>
+{% endif %}
+{% endblock %}

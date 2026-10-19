@@ -1,90 +1,67 @@
 {% extends "base.html" %}
 
-{% block title %}Cadastro de Fazenda{% endblock %}
+{% block title %}Cadastro de fazenda · Emityma{% endblock %}
 
 {% block content %}
-    {% include "topbar.html" %}
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-7 col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="text-center mb-0">Cadastro de Fazenda</h2>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-xl-6">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h1 class="h3 text-center mb-0">Cadastro de Fazenda</h1>
+                </div>
+                <div class="card-body">
+                    {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <p class="mb-1 font-weight-bold">Corrija os campos abaixo:</p>
+                        <ul class="mb-0">
+                            {% for campo in form %}{% for erro in campo.errors %}<li>{{ campo.label }}: {{ erro }}</li>{% endfor %}{% endfor %}
+                            {% for erro in form.non_field_errors %}<li>{{ erro }}</li>{% endfor %}
+                        </ul>
                     </div>
-                    <div class="card-body">
-                        <form method="post" action="{% url 'cadastrar_fazenda' %}">
-                            {% csrf_token %}
-                            <div class="mb-4">
-                                <label for="proprietario" class="form-label">Proprietário</label>
-                                <input type="text" class="form-control" id="proprietario" name="proprietario" placeholder="Nome completo do proprietário" required>
-                            </div>
+                    {% endif %}
+                    <form method="post" action="{% url 'cadastrar_fazenda' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="proprietario">Proprietário</label>
+                            <input type="text" class="form-control" id="proprietario" name="proprietario" maxlength="50" value="{{ form.proprietario.value|default:'' }}" placeholder="Nome completo do proprietário" autocomplete="name" required>
+                        </div>
 
-                            <div class="mb-4">
-                                <label for="nome" class="form-label">Nome da Fazenda</label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome da propriedade" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="nome">Nome da Fazenda</label>
+                            <input type="text" class="form-control" id="nome" name="nome" maxlength="50" value="{{ form.nome.value|default:'' }}" placeholder="Nome da propriedade" required>
+                        </div>
 
-                            <div class="mb-4">
-                                <label for="tamanho" class="form-label">Tamanho (ha)</label>
-                                <input type="number" class="form-control" id="tamanho" name="tamanho" placeholder="Ex: 1500" step="0.01" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="tamanho">Tamanho (ha)</label>
+                            <input type="number" class="form-control" id="tamanho" name="tamanho" value="{{ form.tamanho.value|default:'' }}" placeholder="Ex: 1500" step="0.01" min="0.01" required>
+                        </div>
 
-                            <div class="mb-4">
-                                <label for="email" class="form-label">E-mail</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="contato@email.com" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" class="form-control" id="email" name="email" maxlength="50" value="{{ form.email.value|default:'' }}" placeholder="contato@email.com" autocomplete="email" required>
+                        </div>
 
-                            <div class="mb-4">
-                                <label for="telefone" class="form-label">Telefone</label>
-                                <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(XX) XXXXX-XXXX" required>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="uf" class="form-label">UF</label>
-                                <select id="uf" name="uf" class="form-select" required>
-                                    <option selected disabled value="">Selecione o estado...</option>
-                                    <option value="AC">Acre</option>
-                                    <option value="AL">Alagoas</option>
-                                    <option value="AP">Amapá</option>
-                                    <option value="AM">Amazonas</option>
-                                    <option value="BA">Bahia</option>
-                                    <option value="CE">Ceará</option>
-                                    <option value="DF">Distrito Federal</option>
-                                    <option value="ES">Espírito Santo</option>
-                                    <option value="GO">Goiás</option>
-                                    <option value="MA">Maranhão</option>
-                                    <option value="MT">Mato Grosso</option>
-                                    <option value="MS">Mato Grosso do Sul</option>
-                                    <option value="MG">Minas Gerais</option>
-                                    <option value="PA">Pará</option>
-                                    <option value="PB">Paraíba</option>
-                                    <option value="PR">Paraná</option>
-                                    <option value="PE">Pernambuco</option>
-                                    <option value="PI">Piauí</option>
-                                    <option value="RJ">Rio de Janeiro</option>
-                                    <option value="RN">Rio Grande do Norte</option>
-                                    <option value="RS">Rio Grande do Sul</option>
-                                    <option value="RO">Rondônia</option>
-                                    <option value="RR">Roraima</option>
-                                    <option value="SC">Santa Catarina</option>
-                                    <option value="SP">São Paulo</option>
-                                    <option value="SE">Sergipe</option>
-                                    <option value="TO">Tocantins</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" class="form-control" id="telefone" name="telefone" maxlength="30" value="{{ form.telefone.value|default:'' }}" placeholder="(XX) XXXXX-XXXX" autocomplete="tel" required>
+                        </div>
 
-                            <div class="mb-4">
-                                <label for="cidade" class="form-label">Cidade</label>
-                                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Nome da cidade" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="uf">UF</label>
+                            {% include "_opcoes_uf.html" with campo_id="uf" classe="form-control" selecionada=form.uf.value %}
+                        </div>
 
-                            <div class="d-grid mt-5">
-                                <button type="submit" class="btn btn-success">Cadastrar Fazenda</button>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="form-group">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" name="cidade" maxlength="50" value="{{ form.cidade.value|default:'' }}" placeholder="Nome da cidade" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-block mt-4">Cadastrar Fazenda</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

@@ -1,212 +1,117 @@
-{% load static %}
+{% extends "dashboard/base_dashboard.html" %}
+{% load l10n %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
+{% block title %}Gerenciar fazenda{% endblock %}
 
-<head>
+{% block content %}
+<h1 class="h3 mb-2 text-gray-800">{{ fazenda.nome }} <span class="h5 text-gray-600">- Gerenciamento</span></h1>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Emityma - Dashboard</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
-
-</head>
-
-<body id="page-top">
-
-
-        <!-- Sidebar/Topbar -->
-        {% include "dashboard/sidebar.html" %}
-    
-
-        
-                <!-- Begin Page Content -->
-            <div class="container-fluid">
-            <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">{{ fazenda.nome }} <span class="h5 text-gray-600">- Gerenciamento</span> </h1>
-
-
-                    <!-- Card de ações da fazenda -->
-                    <div class="card mb-4">
-                        <div class="card-body d-flex justify-content-center">
-                            <button type="button" class="btn btn-info mx-2" data-toggle="modal" data-target="#modalAdicionarUsuario">
-                                <i class="fas fa-user-plus"></i> Adicionar Usuário
-                            </button>
-                            <button type="button" class="btn btn-warning mx-2" data-toggle="modal" data-target="#modalEditarFazenda">
-                                <i class="fas fa-edit"></i> Editar Fazenda
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Talhão</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th>Área(ha)</th>
-                                            <th>Quantidade de Culturas</th>
-                                            <th>Plantio em andamento</th>
-                                            <th>Editar</th>
-                                            <th>Excluir</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% if talhoes %}
-                                            {% for talhao in talhoes %}
-                                            <tr>
-                                                <td>{{ talhao.nome }}</td>
-                                                <td>{{ talhao.area }}</td>
-                                                <td>{{ talhao.qtd_cultura|default:"0" }}</td>
-                                                <td>
-                                                    {% if talhao.qtd_cultura > 0 %}
-                                                        Sim
-                                                    {% else %}
-                                                        Não
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    <button 
-                                                        type="button"
-                                                        class="btn btn-sm btn-link"
-                                                        title="Editar"
-                                                        data-toggle="modal"
-                                                        data-target="#modalEditarTalhao"
-                                                        data-id="{{ talhao.id }}"
-                                                        data-nome="{{ talhao.nome }}"
-                                                        data-area="{{ talhao.area }}">
-                                                        <i class="fas fa-edit text-primary"></i>
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button 
-                                                        type="button"
-                                                        class="btn btn-sm btn-link"
-                                                        title="Excluir"
-                                                        data-toggle="modal"
-                                                        data-target="#modalExcluirTalhao"
-                                                        data-id="{{ talhao.id }}">
-                                                            <i class="fas fa-trash-alt text-danger"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        {% else %}
-                                            <tr>
-                                                <td colspan="6" class="text-center">
-                                                    Nenhum talhão cadastrado.<br>
-                                                    <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#modalTalhao">
-                                                        Criar Talhão
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        {% endif %}
-                                    </tbody>
-                                </table>
-                            </div>
-                            {% if talhoes %}
-                            <button class="btn btn-success mb-3 float-right" data-toggle="modal" data-target="#modalTalhao">Criar Talhão</button>
-                            {% else %}
-                            {% endif %}
-                        </div>
-                    </div>
-
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Emityma</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
+<div class="card mb-4">
+    <div class="card-body d-flex flex-wrap justify-content-center">
+        <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#modalAdicionarUsuario">
+            <i class="fas fa-user-plus" aria-hidden="true"></i> Adicionar Usuário
+        </button>
+        <button type="button" class="btn btn-warning m-1" data-toggle="modal" data-target="#modalEditarFazenda">
+            <i class="fas fa-edit" aria-hidden="true"></i> Editar Fazenda
+        </button>
+        <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target="#modalTalhao">
+            <i class="fas fa-plus" aria-hidden="true"></i> Criar Talhão
+        </button>
     </div>
-    <!-- End of Page Wrapper -->
+</div>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Pronto para Sair?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Selecione "Sair" abaixo se quiser encerrar a sessão.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-success" href="{% url 'sair' %}">Sair</a>
-                </div>
-            </div>
+<section class="card shadow mb-4" aria-labelledby="titulo-lista-talhoes">
+    <div class="card-header py-3">
+        <h2 class="m-0 h6 font-weight-bold text-success" id="titulo-lista-talhoes">Talhões</h2>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Área (ha)</th>
+                        <th scope="col">Quantidade de Plantios</th>
+                        <th scope="col">Plantio em andamento</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Excluir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for talhao in talhoes %}
+                    {% with qtd=talhao.qtd_plantios %}
+                    <tr>
+                        <td>{{ talhao.nome }}</td>
+                        <td>{{ talhao.area|floatformat:"-2g" }}</td>
+                        <td>{{ qtd }}</td>
+                        <td>{% if qtd > 0 %}Sim{% else %}Não{% endif %}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-link" title="Editar"
+                                aria-label="Editar talhão {{ talhao.nome }}"
+                                data-toggle="modal" data-target="#modalEditarTalhao"
+                                data-id="{{ talhao.id }}"
+                                data-nome="{{ talhao.nome }}"
+                                data-area="{{ talhao.area|unlocalize }}">
+                                <i class="fas fa-edit text-primary" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-link" title="Excluir"
+                                aria-label="Excluir talhão {{ talhao.nome }}"
+                                data-toggle="modal" data-target="#modalExcluirTalhao"
+                                data-id="{{ talhao.id }}"
+                                data-nome="{{ talhao.nome }}">
+                                <i class="fas fa-trash-alt text-danger" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endwith %}
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            Nenhum talhão cadastrado.<br>
+                            <button type="button" class="btn btn-success mt-2" data-toggle="modal" data-target="#modalTalhao">Criar Talhão</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
+</section>
+{% endblock %}
 
-    <!-- Modal Cadastro Talhão -->
-    <div class="modal fade" id="modalTalhao" tabindex="-1" role="dialog" aria-labelledby="modalTalhaoLabel" aria-hidden="true">
+{% block modals %}
+<div class="modal fade" id="modalTalhao" tabindex="-1" role="dialog" aria-labelledby="modalTalhaoLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" action="{% url 'gerenciar_fazenda' slug=fazenda.slug %}">
-        {% csrf_token %}
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="modalTalhaoLabel">Cadastrar Talhão</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="nome">Nome</label>
-                    <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do Talhão" required>
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5" id="modalTalhaoLabel">Cadastrar Talhão</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label for="area">Área (ha)</label>
-                    <input type="number" step="0.01" class="form-control" id="area" name="area" placeholder="Área do Talhão" required>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" id="nome" name="nome" maxlength="50" placeholder="Nome do Talhão" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="area">Área (ha)</label>
+                        <input type="number" step="0.01" min="0.01" class="form-control" id="area" name="area" placeholder="Área do Talhão" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
                 </div>
             </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-success">Salvar</button>
-            </div>
-        </div>
         </form>
     </div>
-    </div>
+</div>
 
-    <!-- Modal Editar Talhão -->
 <div class="modal fade" id="modalEditarTalhao" tabindex="-1" role="dialog" aria-labelledby="modalEditarTalhaoLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" action="{% url 'editar_talhao' slug=fazenda.slug %}">
@@ -214,7 +119,7 @@
             <input type="hidden" id="edit-talhao-id" name="talhao_id">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalEditarTalhaoLabel">Editar Talhão</h5>
+                    <h2 class="modal-title h5" id="modalEditarTalhaoLabel">Editar Talhão</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -222,11 +127,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="edit-nome">Nome</label>
-                        <input type="text" class="form-control" id="edit-nome" name="nome" required>
+                        <input type="text" class="form-control" id="edit-nome" name="nome" maxlength="50" required>
                     </div>
                     <div class="form-group">
                         <label for="edit-area">Área (ha)</label>
-                        <input type="number" step="0.01" class="form-control" id="edit-area" name="area" required>
+                        <input type="number" step="0.01" min="0.01" class="form-control" id="edit-area" name="area" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -238,8 +143,6 @@
     </div>
 </div>
 
-
-<!-- Modal Excluir Talhão -->
 <div class="modal fade" id="modalExcluirTalhao" tabindex="-1" role="dialog" aria-labelledby="modalExcluirTalhaoLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" action="{% url 'excluir_talhao' slug=fazenda.slug %}">
@@ -247,13 +150,13 @@
             <input type="hidden" id="excluir-talhao-id" name="talhao_id">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalExcluirTalhaoLabel">Excluir Talhão</h5>
+                    <h2 class="modal-title h5" id="modalExcluirTalhaoLabel">Excluir Talhão</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Tem certeza que deseja excluir este talhão?
+                    Tem certeza que deseja excluir o talhão <strong id="excluir-talhao-nome"></strong>? Os plantios dele também serão excluídos.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -264,15 +167,13 @@
     </div>
 </div>
 
-
-<!-- Modal Adicionar Usuário -->
 <div class="modal fade" id="modalAdicionarUsuario" tabindex="-1" role="dialog" aria-labelledby="modalAdicionarUsuarioLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" action="{% url 'adicionar_usuario_fazenda' slug=fazenda.slug %}">
             {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalAdicionarUsuarioLabel">Adicionar Usuário à Fazenda</h5>
+                    <h2 class="modal-title h5" id="modalAdicionarUsuarioLabel">Adicionar Usuário à Fazenda</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -283,33 +184,29 @@
                             <label for="usuario-email">E-mail do Usuário</label>
                             <input type="email" class="form-control" id="usuario-email" name="email" placeholder="usuario@email.com" required>
                         </div>
-                        <button type="button" class="btn btn-success" id="buscar-usuario">Buscar</button>
+                        <p id="busca-usuario-erro" class="text-danger small" role="alert" hidden></p>
+                        <button type="button" class="btn btn-success" id="buscar-usuario"
+                            data-url="{% url 'buscar_usuario_por_email' slug=fazenda.slug %}">Buscar</button>
                     </div>
 
-                    
-                    <div id="etapa-confirmacao" style="display:none;">
+                    <div id="etapa-confirmacao" hidden>
                         <p>Confirme o usuário a ser adicionado:</p>
                         <div class="form-group">
-                            <label>Nome:</label>
-                            <input type="text" class="form-control" id="usuario-nome" name="nome" readonly>
+                            <label for="usuario-nome">Nome</label>
+                            <input type="text" class="form-control" id="usuario-nome" readonly>
                         </div>
                         <div class="form-group">
-                            <label>Email:</label>
+                            <label for="usuario-email-confirm">Email</label>
                             <input type="email" class="form-control" id="usuario-email-confirm" readonly>
                         </div>
                         <div class="form-group">
                             <label for="nivel-acesso">Nível de Acesso</label>
-                            <select class="form-control" id="nivel-acesso" name="nivel_acesso" required>
-                                <option value="" disabled selected>Selecione...</option>
-                                <option value="Administrador">Administrador</option>
-                                <option value="Gerente">Gerente</option>
-                                <option value="Operador">Operador</option>
-                            </select>
+                            {% include "dashboard/_opcoes_nivel_acesso.html" with campo_id="nivel-acesso" placeholder=True %}
                         </div>
                         <button type="button" class="btn btn-success" id="confirmar-adicao">Confirmar</button>
                     </div>
 
-                    <div id="etapa-final" style="display:none;">
+                    <div id="etapa-final" hidden>
                         <p class="mb-3">Tem certeza que deseja adicionar este usuário à fazenda com o nível de acesso selecionado?</p>
                         <button type="button" class="btn btn-secondary" id="voltar-confirmacao">Voltar</button>
                         <button type="submit" class="btn btn-success">Adicionar Usuário</button>
@@ -323,83 +220,53 @@
     </div>
 </div>
 
-<!-- Modal Editar Fazenda -->
 <div class="modal fade" id="modalEditarFazenda" tabindex="-1" role="dialog" aria-labelledby="modalEditarFazendaLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" action="{% url 'editar_fazenda' slug=fazenda.slug %}">
             {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalEditarFazendaLabel">Editar Fazenda</h5>
+                    <h2 class="modal-title h5" id="modalEditarFazendaLabel">Editar Fazenda</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="etapa-dados-fazenda">
                     <div class="form-group">
                         <label for="fazenda-nome">Nome da Fazenda</label>
-                        <input type="text" class="form-control" id="fazenda-nome" name="nome" value="{{ fazenda.nome }}" required>
+                        <input type="text" class="form-control" id="fazenda-nome" name="nome" maxlength="50" value="{{ fazenda.nome }}" required>
                     </div>
                     <div class="form-group">
                         <label for="fazenda-proprietario">Proprietário</label>
-                        <input type="text" class="form-control" id="fazenda-proprietario" name="proprietario" value="{{ fazenda.proprietario }}" required>
+                        <input type="text" class="form-control" id="fazenda-proprietario" name="proprietario" maxlength="50" value="{{ fazenda.proprietario }}" required>
                     </div>
                     <div class="form-group">
                         <label for="fazenda-uf">UF</label>
-                        <select class="form-control" id="fazenda-uf" name="uf" required>
-                            <option value="" disabled>Selecione...</option>
-                            <option value="AC" {% if fazenda.uf == "AC" %}selected{% endif %}>AC</option>
-                            <option value="AL" {% if fazenda.uf == "AL" %}selected{% endif %}>AL</option>
-                            <option value="AP" {% if fazenda.uf == "AP" %}selected{% endif %}>AP</option>
-                            <option value="AM" {% if fazenda.uf == "AM" %}selected{% endif %}>AM</option>
-                            <option value="BA" {% if fazenda.uf == "BA" %}selected{% endif %}>BA</option>
-                            <option value="CE" {% if fazenda.uf == "CE" %}selected{% endif %}>CE</option>
-                            <option value="DF" {% if fazenda.uf == "DF" %}selected{% endif %}>DF</option>
-                            <option value="ES" {% if fazenda.uf == "ES" %}selected{% endif %}>ES</option>
-                            <option value="GO" {% if fazenda.uf == "GO" %}selected{% endif %}>GO</option>
-                            <option value="MA" {% if fazenda.uf == "MA" %}selected{% endif %}>MA</option>
-                            <option value="MT" {% if fazenda.uf == "MT" %}selected{% endif %}>MT</option>
-                            <option value="MS" {% if fazenda.uf == "MS" %}selected{% endif %}>MS</option>
-                            <option value="MG" {% if fazenda.uf == "MG" %}selected{% endif %}>MG</option>
-                            <option value="PA" {% if fazenda.uf == "PA" %}selected{% endif %}>PA</option>
-                            <option value="PB" {% if fazenda.uf == "PB" %}selected{% endif %}>PB</option>
-                            <option value="PR" {% if fazenda.uf == "PR" %}selected{% endif %}>PR</option>
-                            <option value="PE" {% if fazenda.uf == "PE" %}selected{% endif %}>PE</option>
-                            <option value="PI" {% if fazenda.uf == "PI" %}selected{% endif %}>PI</option>
-                            <option value="RJ" {% if fazenda.uf == "RJ" %}selected{% endif %}>RJ</option>
-                            <option value="RN" {% if fazenda.uf == "RN" %}selected{% endif %}>RN</option>
-                            <option value="RS" {% if fazenda.uf == "RS" %}selected{% endif %}>RS</option>
-                            <option value="RO" {% if fazenda.uf == "RO" %}selected{% endif %}>RO</option>
-                            <option value="RR" {% if fazenda.uf == "RR" %}selected{% endif %}>RR</option>
-                            <option value="SC" {% if fazenda.uf == "SC" %}selected{% endif %}>SC</option>
-                            <option value="SP" {% if fazenda.uf == "SP" %}selected{% endif %}>SP</option>
-                            <option value="SE" {% if fazenda.uf == "SE" %}selected{% endif %}>SE</option>
-                            <option value="TO" {% if fazenda.uf == "TO" %}selected{% endif %}>TO</option>
-                        </select>
+                        {% include "_opcoes_uf.html" with campo_id="fazenda-uf" classe="form-control" selecionada=fazenda.uf %}
                     </div>
                     <div class="form-group">
                         <label for="fazenda-cidade">Cidade</label>
-                        <input type="text" class="form-control" id="fazenda-cidade" name="cidade" value="{{ fazenda.cidade }}" required>
+                        <input type="text" class="form-control" id="fazenda-cidade" name="cidade" maxlength="50" value="{{ fazenda.cidade }}" required>
                     </div>
                     <div class="form-group">
                         <label for="fazenda-email">Email</label>
-                        <input type="email" class="form-control" id="fazenda-email" name="email" value="{{ fazenda.email }}" required>
+                        <input type="email" class="form-control" id="fazenda-email" name="email" maxlength="50" value="{{ fazenda.email }}" required>
                     </div>
                     <div class="form-group">
                         <label for="fazenda-telefone">Telefone</label>
-                        <input type="text" class="form-control" id="fazenda-telefone" name="telefone" value="{{ fazenda.telefone }}">
+                        <input type="tel" class="form-control" id="fazenda-telefone" name="telefone" maxlength="30" value="{{ fazenda.telefone }}" required>
                     </div>
                     <div class="form-group">
                         <label for="fazenda-tamanho">Tamanho (ha)</label>
-                        <input type="number" step="0.01" class="form-control" id="fazenda-tamanho" name="tamanho" value="{{ fazenda.tamanho }}" required>
+                        <input type="number" step="0.01" min="0.01" class="form-control" id="fazenda-tamanho" name="tamanho" value="{{ fazenda.tamanho|unlocalize }}" required>
                     </div>
                 </div>
-                <div id="etapa-confirmar-edicao-fazenda" style="display:none;">
-                    <p class="mb-3 ml-3">Tem certeza que deseja salvar as alterações desta fazenda?</p>
-                    <button type="button" class="btn btn-secondary mb-3 ml-3" id="voltar-edicao-fazenda">Voltar</button>
-                    <button type="submit" class="btn btn-success mb-3">Salvar Alterações</button>
+                <div id="etapa-confirmar-edicao-fazenda" class="modal-body" hidden>
+                    <p class="mb-3">Tem certeza que deseja salvar as alterações desta fazenda?</p>
+                    <button type="button" class="btn btn-secondary" id="voltar-edicao-fazenda">Voltar</button>
+                    <button type="submit" class="btn btn-success">Salvar Alterações</button>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" id="rodape-edicao-fazenda">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" id="confirmar-edicao-fazenda">Salvar Alterações</button>
                 </div>
@@ -407,117 +274,104 @@
         </form>
     </div>
 </div>
-    
+{% endblock %}
 
+{% block scripts %}
+<script>
+    (function ($) {
+        'use strict';
 
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'js/dashboard.js' %}"></script>
-
-    <!-- Page level plugins -->
-    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
-    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
-
-    <!-- Scripts para os modals de edição -->
-    <script>
         $('#modalEditarTalhao').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var talhaoId = button.data('id');
-            var nome = button.data('nome');
-            var area = button.data('area');
+            var botao = $(event.relatedTarget);
             var modal = $(this);
-            modal.find('#edit-talhao-id').val(talhaoId);
-            modal.find('#edit-nome').val(nome);
-            modal.find('#edit-area').val(area);
+            modal.find('#edit-talhao-id').val(botao.data('id'));
+            modal.find('#edit-nome').val(botao.data('nome'));
+            modal.find('#edit-area').val(botao.data('area'));
         });
 
         $('#modalExcluirTalhao').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var talhaoId = button.data('id');
-        var modal = $(this);
-        modal.find('#excluir-talhao-id').val(talhaoId);
+            var botao = $(event.relatedTarget);
+            $('#excluir-talhao-id').val(botao.data('id'));
+            $('#excluir-talhao-nome').text(botao.data('nome'));
         });
 
-        $('#buscar-usuario').on('click', function() {
-            var email = $('#usuario-email').val();
-            if(email) {
-                $.ajax({
-                    url: "{% url 'buscar_usuario_por_email' slug=fazenda.slug %}",
-                    data: {email: email},
-                    success: function(data) {
-                        $('#usuario-nome').val(data.nome);
-                        $('#usuario-email-confirm').val(data.email);
-                        $('#etapa-email').hide();
-                        $('#etapa-confirmacao').show();
-                        // Preenche o campo do form final
-                        $('#usuario-email').val(data.email);
-                    },
-                    error: function(xhr) {
-                        var resposta = xhr.responseJSON;
-                        if(resposta && resposta.erro){
-                            alert(resposta.erro);
-                        } else {
-                            alert('Erro ao buscar usuário!');
-                        }
-                    }
+        // ---- Adicionar usuário: busca por e-mail -> nível de acesso -> confirmação ----
+        function mostrarEtapa(id) {
+            $('#etapa-email, #etapa-confirmacao, #etapa-final').prop('hidden', true);
+            $('#' + id).prop('hidden', false);
+        }
+
+        function mostrarErroBusca(texto) {
+            $('#busca-usuario-erro').text(texto).prop('hidden', !texto);
+        }
+
+        $('#buscar-usuario').on('click', function () {
+            var botao = $(this);
+            var campo = $('#usuario-email');
+            if (!campo[0].checkValidity()) {
+                campo[0].reportValidity();
+                return;
+            }
+            mostrarErroBusca('');
+            botao.prop('disabled', true).text('Buscando...');
+            $.ajax({ url: botao.data('url'), data: { email: campo.val() } })
+                .done(function (data) {
+                    $('#usuario-nome').val(data.nome);
+                    $('#usuario-email-confirm').val(data.email);
+                    campo.val(data.email);
+                    mostrarEtapa('etapa-confirmacao');
+                    $('#nivel-acesso').trigger('focus');
+                })
+                .fail(function (xhr) {
+                    var resposta = xhr.responseJSON;
+                    mostrarErroBusca(resposta && resposta.erro ? resposta.erro : 'Erro ao buscar usuário. Tente novamente.');
+                })
+                .always(function () {
+                    botao.prop('disabled', false).text('Buscar');
                 });
-            }
-        });
-        $('#confirmar-adicao').on('click', function() {
-            if($('#nivel-acesso').val()) {
-                $('#etapa-confirmacao').hide();
-                $('#etapa-final').show();
-            } else {
-                alert('Selecione o nível de acesso!');
-            }
         });
 
-        // Voltar para seleção de nível de acesso
-        $('#voltar-confirmacao').on('click', function() {
-            $('#etapa-final').hide();
-            $('#etapa-confirmacao').show();
+        $('#confirmar-adicao').on('click', function () {
+            var nivel = $('#nivel-acesso');
+            if (!nivel.val()) {
+                nivel[0].reportValidity();
+                return;
+            }
+            mostrarEtapa('etapa-final');
         });
 
-        // Resetar modal ao fechar
+        $('#voltar-confirmacao').on('click', function () {
+            mostrarEtapa('etapa-confirmacao');
+        });
+
         $('#modalAdicionarUsuario').on('hidden.bs.modal', function () {
-            $('#etapa-email').show();
-            $('#etapa-confirmacao').hide();
-            $('#etapa-final').hide();
-            $('#usuario-email').val('');
-            $('#usuario-nome').val('');
-            $('#usuario-email-confirm').val('');
-            $('#nivel-acesso').val('');
+            mostrarEtapa('etapa-email');
+            mostrarErroBusca('');
+            $('#usuario-email, #usuario-nome, #usuario-email-confirm, #nivel-acesso').val('');
         });
 
-        $('#confirmar-edicao-fazenda').on('click', function() {
-            $('#modalEditarFazenda .modal-body').hide();
-            $('#modalEditarFazenda .modal-footer').hide();
-            $('#etapa-confirmar-edicao-fazenda').show();
+        // ---- Editar fazenda: pede confirmação antes de enviar ----
+        function confirmandoEdicao(ativo) {
+            $('#etapa-dados-fazenda, #rodape-edicao-fazenda').prop('hidden', ativo);
+            $('#etapa-confirmar-edicao-fazenda').prop('hidden', !ativo);
+        }
+
+        $('#confirmar-edicao-fazenda').on('click', function () {
+            var form = $(this).closest('form')[0];
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            confirmandoEdicao(true);
         });
 
-        $('#voltar-edicao-fazenda').on('click', function() {
-            $('#etapa-confirmar-edicao-fazenda').hide();
-            $('#modalEditarFazenda .modal-body').show();
-            $('#modalEditarFazenda .modal-footer').show();
+        $('#voltar-edicao-fazenda').on('click', function () {
+            confirmandoEdicao(false);
         });
 
         $('#modalEditarFazenda').on('hidden.bs.modal', function () {
-            $('#etapa-confirmar-edicao-fazenda').hide();
-            $('#modalEditarFazenda .modal-body').show();
-            $('#modalEditarFazenda .modal-footer').show();
+            confirmandoEdicao(false);
         });
-    </script>
-
-</body>
-
-</html>
+    })(jQuery);
+</script>
+{% endblock %}

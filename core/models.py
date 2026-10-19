@@ -13,16 +13,24 @@ class Fazenda(models.Model):
     tamanho         = models.FloatField(max_length=20, verbose_name="Tamanho (ha)")
     slug            = models.SlugField(max_length=60, unique=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.nome)
-        super().save(*args, **kwargs)
-
     usuarios = models.ManyToManyField(
         Usuario,
         through='UsuarioFazenda',
         related_name='fazendas'
     )
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self._gerar_slug_unico()
+        super().save(*args, **kwargs)
+
+    def _gerar_slug_unico(self):
+        base = slugify(self.nome)[:50] or 'fazenda'
+        slug, sufixo = base, 2
+        while Fazenda.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+            slug = f"{base}-{sufixo}"
+            sufixo += 1
+        return slug
 
     class Meta:
         verbose_name = "Fazenda"

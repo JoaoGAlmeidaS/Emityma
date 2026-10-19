@@ -1,0 +1,62 @@
+/* Ajustes comuns de acessibilidade e do modo demonstração (todas as páginas). */
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 10000;
+  padding: .5rem 1rem;
+  background: #fff;
+  color: #1a5c2e;
+  border-radius: .35rem;
+  box-shadow: 0 .15rem 1rem rgba(0, 0, 0, .2);
+}
+.skip-link:focus { top: 1rem; }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #f6c23e;
+  outline-offset: 2px;
+}
+
+main:focus { outline: none; }
+
+.demo-banner {
+  margin: 0;
+  padding: .6rem 1rem;
+  background: #fff3cd;
+  color: #664d03;
+  border-bottom: 1px solid #ffe69c;
+  font-size: .9rem;
+  text-align: center;
+}
+.demo-banner a { color: #523e02; font-weight: 700; text-decoration: underline; }
+
+.demo-aviso {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 2000;
+  max-width: calc(100% - 2rem);
+  padding: .75rem 1.25rem;
+  transform: translateX(-50%);
+  background: #343a40;
+  color: #fff;
+  border-radius: .5rem;
+  box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .3);
+  font-size: .95rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .wow { visibility: visible !important; }
+}

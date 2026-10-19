@@ -1,0 +1,76 @@
+name: Testes e GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Permissões mínimas por padrão; o job de deploy recebe as permissões do Pages.
+permissions:
+  contents: read
+
+# Não cancela uma publicação em andamento; execuções novas aguardam na fila.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Testes e build estático
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Configurar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Instalar dependências
+        run: python -m pip install -r requirements.txt
+
+      - name: Verificações do Django
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+
+      - name: Testes
+        run: python manage.py test
+
+      - name: Configurar GitHub Pages
+        id: pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Gerar site estático
+        env:
+          # Caminho-base informado pelo Pages ("/Emityma" em usuario.github.io/Emityma,
+          # vazio em domínio próprio). Em PRs, onde o Pages não é configurado, usa o nome do repositório.
+          BASE_PATH: ${{ github.event_name == 'pull_request' && format('/{0}', github.event.repository.name) || steps.pages.outputs.base_path }}
+        run: python manage.py build_pages --settings=emityma.settings_pages --output _site --base-path "$BASE_PATH/"
+
+      - name: Publicar artefato do Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy no GitHub Pages
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -2040,3 +2040,29 @@ p {
   width: 40%;
 }
 
+/* Ajustes de legibilidade e contraste */
+.headerNLogo img {
+  width: 90px;
+  height: auto;
+}
+
+@media (min-width: 992px) {
+  .navbar-nav .nav-item a.active,
+  .navbar-nav .nav-item a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+
+  /* Cabeçalho fixo tem fundo branco: o destaque precisa de cor escura. */
+  .sticky .navbar-nav .nav-item a.active,
+  .sticky .navbar-nav .nav-item a:hover {
+    color: #1b7130;
+  }
+}
+
+/* O menu é posicionado em relação ao cabeçalho, para não ficar sob a faixa de demonstração. */
+.header {
+  position: relative;
+}

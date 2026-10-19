@@ -1,0 +1,6 @@
+<select class="{{ classe }}" id="{{ campo_id }}" name="uf" required>
+    <option value="" disabled{% if not selecionada %} selected{% endif %}>Selecione o estado...</option>
+    {% for sigla, nome in ufs %}
+    <option value="{{ sigla }}"{% if sigla == selecionada %} selected{% endif %}>{{ nome }}</option>
+    {% endfor %}
+</select>

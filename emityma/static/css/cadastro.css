@@ -1,22 +1,25 @@
-.gradient-custom-2 {
-/* fallback for old browsers */
-background: #fccb90;
-
-/* Chrome 10-25, Safari 5.1-6 */
-background: -webkit-linear-gradient(to right, #4CA649, #20734C, #1B7130);
-
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to right, #4CA649, #20734C, #1B7130);
+body {
+  background-color: #eee;
 }
 
-@media (min-width: 768px) {
+.gradient-custom-2 {
+  background: #20734c;
+  background: linear-gradient(to right, #4ca649, #20734c, #1b7130);
+}
+
 .gradient-form {
-height: 100vh !important;
+  min-height: 100vh;
 }
+
+.logo-acesso {
+  width: 185px;
+  max-width: 100%;
+  height: auto;
 }
-@media (min-width: 769px) {
-.gradient-custom-2 {
-border-top-right-radius: .3rem;
-border-bottom-right-radius: .3rem;
-}
+
+@media (min-width: 992px) {
+  .gradient-custom-2.col-lg-6 {
+    border-top-right-radius: .3rem;
+    border-bottom-right-radius: .3rem;
+  }
 }

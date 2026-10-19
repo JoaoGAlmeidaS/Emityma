@@ -1,0 +1,6 @@
+<h3 class="small font-weight-bold">{{ rotulo }}: {{ quantidade }} <span class="float-right">{{ percentual }}%</span></h3>
+<div class="progress mb-4">
+    <div class="progress-bar bg-{{ cor }}" role="progressbar" style="width: {{ percentual }}%"
+        aria-label="Tarefas com prioridade {{ rotulo|lower }}"
+        aria-valuenow="{{ percentual }}" aria-valuemin="0" aria-valuemax="100"></div>
+</div>

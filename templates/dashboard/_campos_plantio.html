@@ -1,0 +1,26 @@
+<div class="form-group">
+    <label for="{{ prefixo }}cultura">Cultura</label>
+    <select class="form-control" id="{{ prefixo }}cultura" name="cultura" required>
+        {% if placeholder %}<option value="" disabled selected>Selecione a cultura...</option>{% endif %}
+        {% for cultura in culturas %}
+        <option value="{{ cultura.id }}">{{ cultura.nome }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label for="{{ prefixo }}talhao">Talhão</label>
+    <select class="form-control" id="{{ prefixo }}talhao" name="talhao" required>
+        {% if placeholder %}<option value="" disabled selected>Selecione o talhão...</option>{% endif %}
+        {% for talhao in talhoes %}
+        <option value="{{ talhao.id }}">{{ talhao.nome }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label for="{{ prefixo }}dt_plantio">Data de Plantio</label>
+    <input type="date" class="form-control" id="{{ prefixo }}dt_plantio" name="dt_plantio" required>
+</div>
+<div class="form-group">
+    <label for="{{ prefixo }}dt_colheitaPrevista">Data Prevista da Colheita</label>
+    <input type="date" class="form-control" id="{{ prefixo }}dt_colheitaPrevista" name="dt_colheitaPrevista" required>
+</div>

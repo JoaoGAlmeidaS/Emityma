@@ -1,39 +1,21 @@
-from django.shortcuts import render, redirect
-from .models import Fazenda, UsuarioFazenda
-from usuario.models import Usuario
+from django.shortcuts import redirect, render
 
+from .access import NIVEL_ADMIN, usuario_logado
+from .forms import UFS, FazendaForm
+from .models import UsuarioFazenda
+
+
+@usuario_logado
 def criar_fazenda(request):
-    usuario_id = request.session.get('usuario_id')
-    usuario = Usuario.objects.get(usuario_id=usuario_id) if usuario_id else None
-    if not usuario_id:
-        return redirect('entrar')
+    form = FazendaForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        fazenda = form.save()
+        UsuarioFazenda.objects.create(fazenda=fazenda, usuario=request.usuario, nivel_acesso=NIVEL_ADMIN)
+        return redirect('dashboard_home', slug=fazenda.slug)
 
-    if request.method == 'POST':
-        nome = request.POST.get('nome')
-        proprietario = request.POST.get('proprietario')
-        uf = request.POST.get('uf')
-        cidade = request.POST.get('cidade')
-        email = request.POST.get('email')
-        telefone = request.POST.get('telefone')
-        tamanho = request.POST.get('tamanho')
-
-        fazenda = Fazenda.objects.create(
-            nome=nome,
-            proprietario=proprietario,
-            uf=uf,
-            cidade=cidade,
-            email=email,
-            telefone=telefone,
-            tamanho=tamanho
-        )
-
-        usuario = Usuario.objects.get(usuario_id=usuario_id)
-        UsuarioFazenda.objects.create(
-            fazenda=fazenda,
-            usuario=usuario,
-            nivel_acesso='Administrador'
-        )
-
-        return redirect('dashboard')
-
-    return render(request, 'core/criar_fazenda.html', {'usuario': usuario, 'show_dashboard_btn': True})
+    return render(request, 'core/criar_fazenda.html', {
+        'usuario': request.usuario,
+        'form': form,
+        'ufs': UFS,
+        'show_dashboard_btn': True,
+    })

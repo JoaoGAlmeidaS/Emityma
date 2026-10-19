@@ -1,27 +1,26 @@
-{% load static %}
-
-<!doctype html>
-<html class="no-js" lang="">
+{% load static %}<!doctype html>
+<html class="no-js" lang="pt-br">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>Emityma - Sistema de Gerenciamento de Fazenda</title>
-        <meta name="description" content="">
+        <meta name="description" content="Emityma: sistema web para gestão de fazendas — talhões, culturas, plantios, tarefas e equipes em um só lugar.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">
-        <!-- Place favicon.ico in the root directory -->
+		<link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
 
 		<!-- ========================= CSS here ========================= -->
 		<link rel="stylesheet" href="{% static 'css/bootstrap-5.0.0-alpha-1.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/LineIcons.2.0.css' %}">
 		<link rel="stylesheet" href="{% static 'css/animate.css' %}">
 		<link rel="stylesheet" href="{% static 'css/main.css' %}">
+		<link rel="stylesheet" href="{% static 'css/acessibilidade.css' %}">
     </head>
     <body>
+        <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+        {% include "_demo_banner.html" %}
 
         <!-- ========================= preloader start ========================= -->
-            <div class="preloader">
+            <div class="preloader" aria-hidden="true">
                 <div class="loader">
                     <div class="ytp-spinner">
                         <div class="ytp-spinner-container">
@@ -45,13 +44,13 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
-                            <nav class="navbar navbar-expand-lg">
-                                <a class="navbar-brand headerNLogo" href="./">
-                                    <img src="{% static 'img/logo/logo.png' %}" alt="">
+                            <nav class="navbar navbar-expand-lg" aria-label="Navegação principal">
+                                <a class="navbar-brand headerNLogo" href="{% url 'home' %}">
+                                    <img src="{% static 'img/logo/logo.png' %}" alt="Emityma">
                                 </a>
                                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                    aria-expanded="false" aria-label="Toggle navigation">
+                                    aria-expanded="false" aria-label="Abrir ou fechar o menu">
                                     <span class="toggler-icon"></span>
                                     <span class="toggler-icon"></span>
                                     <span class="toggler-icon"></span>
@@ -60,7 +59,7 @@
                                 <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                     <ul id="nav" class="navbar-nav ml-auto">
                                         <li class="nav-item">
-                                            <a class="page-scroll active" href="#home">Inicio</a>
+                                            <a class="page-scroll active" href="#home">Início</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="page-scroll" href="#features">Funcionalidades</a>
@@ -72,7 +71,7 @@
                                             <a class="page-scroll" href="#faq">Perguntas Frequentes</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="page-scroll" href="/entrar/">Entrar / Cadastrar</a>
+                                            <a href="{% url 'entrar' %}">{% if STATIC_DEMO %}Ver demonstração{% else %}Entrar / Cadastrar{% endif %}</a>
                                         </li>
                                     </ul>
                                 </div> <!-- navbar collapse -->
@@ -84,9 +83,9 @@
 
         </header>
         <!-- ========================= header end ========================= -->
+        <main id="conteudo" tabindex="-1">
 
         <!-- ========================= slider-section start ========================= -->
-         
         <section id="home" class="hero-section img-bg" style="background-image: url('{% static 'img/hero/hero-bg.svg' %}')">
             <div class="container">
                 <div class="row align-items-center">
@@ -99,8 +98,8 @@
                     </div>
                     <div class="col-xl-5 col-lg-6">
                         <div class="hero-img">
-                            <img  class="wow fadeInRight" data-wow-delay=".4s" data-wow-duration="1.3s" src="{% static 'img/hero/hero-img.png' %}" alt="">
-                            <img src="{% static 'img/hero/hero-shape.svg' %}" alt="" class="shape">
+                            <img  class="wow fadeInRight" data-wow-delay=".4s" data-wow-duration="1.3s" src="{% static 'img/hero/hero-img.png' %}" alt="Ilustração do painel do Emityma com gráficos de produção">
+                            <img src="{% static 'img/hero/hero-shape.svg' %}" alt="" class="shape" aria-hidden="true">
                         </div>
                     </div>
                 </div>
@@ -124,7 +123,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-6">
                         <div class="single-service text-center mb-30 wow fadeInUp" data-wow-delay=".2s" data-wow-duration="1.3s">
                             <div class="service-icon icon-gradient gradient-1 mb-30">
-                                <i class="lni lni-money-protection"></i>
+                                <i class="lni lni-money-protection" aria-hidden="true"></i>
                             </div>
                             <h4 class="mb-15">Gestão de Fazendas</h4>
                             <p>Cadastre múltiplas propriedades e mantenha o controle centralizado de todas as atividades agrícolas.</p>
@@ -133,7 +132,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-6">
                         <div class="single-service text-center mb-30 wow fadeInUp" data-wow-delay=".4s" data-wow-duration="1.3s">
                             <div class="service-icon icon-gradient gradient-2 mb-30">
-                                <i class="lni lni-ux"></i>
+                                <i class="lni lni-ux" aria-hidden="true"></i>
                             </div>
                             <h4 class="mb-15">Monitoramento de Plantios</h4>
                             <p>Acompanhe o desenvolvimento das culturas, com dados de produção estimada e áreas cultivadas.</p>
@@ -142,7 +141,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-6">
                         <div class="single-service text-center mb-30 wow fadeInUp" data-wow-delay=".6s" data-wow-duration="1.3s">
                             <div class="service-icon icon-gradient gradient-3 mb-30">
-                                <i class="lni lni-users"></i>
+                                <i class="lni lni-users" aria-hidden="true"></i>
                             </div>
                             <h4 class="mb-15">Controle de Tarefas e Equipes</h4>
                             <p>Organize tarefas por prioridade, atribua responsáveis e acompanhe a execução com clareza.</p>
@@ -151,7 +150,7 @@
                     <div class="col-xl-3 col-lg-3 col-md-6">
                         <div class="single-service text-center mb-30 wow fadeInUp" data-wow-delay=".8s" data-wow-duration="1.3s">
                             <div class="service-icon icon-gradient  gradient-4 mb-30">
-                                <i class="lni lni-reload"></i>
+                                <i class="lni lni-reload" aria-hidden="true"></i>
                             </div>
                             <h4 class="mb-15">Colaboração com Permissões</h4>
                             <p>Adicione membros à equipe e defina permissões de acesso por fazenda e tipo de operação.</p>
@@ -162,16 +161,15 @@
         </section>
         <!--========================= service-section end========================= -->
 
-        <section id="process"></section>
 
         <!-- ========================= why-use-section start ========================= -->
         <section id="why-use" class="why-use-section pt-150">
-            <img src="{% static 'img/why-use/why-use-shape.png' %}" alt="" class="shape why-use-shape">
+            <img src="{% static 'img/why-use/why-use-shape.png' %}" alt="" aria-hidden="true" class="shape why-use-shape">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-6 col-lg-6">
                         <div class="why-use-img wow fadeInLeft" data-wow-delay=".5s" data-wow-duration="1.3s">
-                            <img src="{% static 'img/why-use/why-use-img.png' %}" alt="" style="width: 720px; height: 417px; object-fit: cover;">
+                            <img src="{% static 'img/why-use/why-use-img.png' %}" alt="Produtor rural acompanhando a lavoura" width="720" height="417" loading="lazy" style="width: 100%; height: auto; aspect-ratio: 720 / 417; object-fit: cover;">
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-12 faq-column">
@@ -186,7 +184,7 @@
                                     <div class="faq-header" id="faq-heading-1">
                                         <button class="faq-btn collapsed" type="button" data-toggle="collapse" data-target="#faq-1"
                                             aria-expanded="true" aria-controls="faq-1">
-                                            <i class="lni lni-bullhorn gradient-1"></i> <span>O Emityma é gratuito?</span>
+                                            <i class="lni lni-bullhorn gradient-1" aria-hidden="true"></i> <span>O Emityma é gratuito?</span>
                                         </button>
                                     </div>
 
@@ -200,7 +198,7 @@
                                     <div class="faq-header" id="faq-heading-2">
                                         <button class="faq-btn collapsed" type="button" data-toggle="collapse" data-target="#faq-2"
                                             aria-expanded="true" aria-controls="faq-2">
-                                            <i class="lni lni-stats-up gradient-2"></i> <span>Como o sistema ajuda no dia a dia da fazenda?</span>
+                                            <i class="lni lni-stats-up gradient-2" aria-hidden="true"></i> <span>Como o sistema ajuda no dia a dia da fazenda?</span>
                                         </button>
                                     </div>
 
@@ -214,7 +212,7 @@
                                     <div class="faq-header" id="faq-heading-3">
                                         <button class="faq-btn collapsed" type="button" data-toggle="collapse" data-target="#faq-3"
                                             aria-expanded="true" aria-controls="faq-3">
-                                            <i class="lni lni-consulting gradient-3"></i> <span>Preciso de internet para usar?</span>
+                                            <i class="lni lni-consulting gradient-3" aria-hidden="true"></i> <span>Preciso de internet para usar?</span>
                                         </button>
                                     </div>
 
@@ -236,13 +234,13 @@
         <!-- ========================= counterup-section start ========================= -->
         <section class="counterup-section pt-50 pb-50">
             <div class="container">
-                <img src="{% static 'img/shape/repeat-shape.svg' %}" alt="" class="shape counter-shape-1">
-                <img src="{% static 'img/shape/repeat-shape.svg' %}" alt="" class="shape counter-shape-2">
+                <img src="{% static 'img/shape/repeat-shape.svg' %}" alt="" aria-hidden="true" class="shape counter-shape-1">
+                <img src="{% static 'img/shape/repeat-shape.svg' %}" alt="" aria-hidden="true" class="shape counter-shape-2">
                 <div class="counter-wrapper gradient-1 pt-50">
                     <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-4">
                             <div class="single-counter text-center mb-50">
-                                <i class="lni lni-heart icon-gradient gradient-2 mb-30"></i>
+                                <i class="lni lni-heart icon-gradient gradient-2 mb-30" aria-hidden="true"></i>
                                 <h3 class="text-white">
                                     <span id="secondo1" class="countup" cup-end="125"></span>
                                 </h3>
@@ -251,7 +249,7 @@
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4">
                             <div class="single-counter text-center mb-50">
-                                <i class="lni lni-star icon-gradient gradient-3 mb-30"></i>
+                                <i class="lni lni-star icon-gradient gradient-3 mb-30" aria-hidden="true"></i>
                                 <h3 class="text-white">
                                     <span id="secondo2" class="countup" cup-end="45"></span>
                                 </h3>
@@ -260,9 +258,9 @@
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4">
                             <div class="single-counter text-center mb-50">
-                                <i class="lni lni-download icon-gradient gradient-4 mb-30"></i>
+                                <i class="lni lni-download icon-gradient gradient-4 mb-30" aria-hidden="true"></i>
                                 <h3 class="text-white">
-                                    <span id="secondo2" class="countup" cup-end="305"></span>
+                                    <span id="secondo3" class="countup" cup-end="305"></span>
                                 </h3>
                                 <p class="mb-0">Usuários ativos</p>
                             </div>
@@ -273,17 +271,7 @@
         </section>
         <!-- ========================= counterup-section end ========================= -->
 
-        <!-- ========================= team-section start ========================= -->
-        <section id="team" class="team-section pt-150 pb-120">
 
-        </section>
-        <!-- ========================= team-section end ========================= -->
-
-        <!-- ========================= testimonial-section start ========================= -->
-        <section class="testimonial-section pt-30 pb-30 gray-bg">
-
-        </section>
-        <!-- ========================= testimonial-section end ========================= -->
 
         <!-- ========================= faq-section start ========================= -->
         <section id="faq" class="faq-section pt-150">
@@ -291,7 +279,7 @@
                 <div class="row align-items-center">
                     <div class="col-xl-6 col-lg-6">
                         <div class="faq-img wow fadeInLeft" data-wow-delay=".5s">
-                            <img src="{% static 'img/faq/faq-img.svg' %}" alt="">
+                            <img src="{% static 'img/faq/faq-img.svg' %}" alt="" aria-hidden="true" loading="lazy">
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6">
@@ -352,48 +340,21 @@
         </section>
         <!-- ========================= faq-section end ========================= -->
 
-        <!-- ========================= blog-section start ========================= -->
-        <section id="blog" class="blog-section pt-150">
 
-        </section>
-        <!-- ========================= blog-section end ========================= -->
 
+        </main>
 
         <!-- ========================= footer start ========================= -->
         <footer class="footer pt-150 gray-bg">
-            <img src="{% static 'img/shape/footer-bg.svg' %}" alt="" class="footer-bg">
+            <img src="{% static 'img/shape/footer-bg.svg' %}" alt="" class="footer-bg" aria-hidden="true" loading="lazy">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="footer-links text-center footerNLogo">
-                            <a href="" class="logo"><img src="{% static 'img/logo/logo.png' %}" alt=""> </a>
-                            <div class="footer-social-links">
+                            <a href="#home" class="logo"><img src="{% static 'img/logo/logo.png' %}" alt="Emityma — voltar ao início" loading="lazy"></a>
+                            <nav class="footer-menu" aria-label="Rodapé">
                                 <ul>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <i class="lni lni-facebook-filled"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <i class="lni lni-twitter-filled"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <i class="lni lni-linkedin-original"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <i class="lni lni-instagram-original"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <nav class="footer-menu">
-                                <ul>
-                                    <li><a href="#home">Inicio</a></li>
+                                    <li><a href="#home">Início</a></li>
                                     <li><a href="#features">Funcionalidades</a></li>
                                     <li><a href="#why-use">Processo</a></li>
                                     <li><a href="#faq">Perguntas Frequentes</a></li>
@@ -408,8 +369,8 @@
 
 
         <!-- ========================= scroll-top ========================= -->
-        <a href="#" class="scroll-top">
-            <i class="lni lni-chevron-up"></i>
+        <a href="#home" class="scroll-top" aria-label="Voltar ao topo">
+            <i class="lni lni-chevron-up" aria-hidden="true"></i>
         </a>
 
 		<!-- ========================= JS here ========================= -->

@@ -1,0 +1,73 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Emityma — painel de gestão da fazenda: talhões, culturas, plantios e tarefas.">
+    <title>{% block title %}Dashboard{% endblock %} · {{ fazenda.nome }} · Emityma</title>
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,400i,700,800&amp;display=swap" rel="stylesheet">
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'css/acessibilidade.css' %}" rel="stylesheet">
+</head>
+
+<body id="page-top">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    {% include "_demo_banner.html" %}
+
+    <div id="wrapper">
+        {% include "dashboard/sidebar.html" %}
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                {% include "dashboard/_topbar.html" %}
+
+                <main id="conteudo" class="container-fluid" tabindex="-1">
+                    {% include "dashboard/_mensagens.html" %}
+                    {% block content %}{% endblock %}
+                </main>
+            </div>
+
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Emityma</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <a class="scroll-to-top rounded" href="#page-top" aria-label="Voltar ao topo">
+        <i class="fas fa-angle-up" aria-hidden="true"></i>
+    </a>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5" id="logoutModalLabel">Pronto para sair?</h2>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">Selecione "Sair" abaixo se quiser encerrar a sessão.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-success" href="{% if STATIC_DEMO %}{% url 'home' %}{% else %}{% url 'sair' %}{% endif %}">Sair</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block modals %}{% endblock %}
+
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    {% if STATIC_DEMO %}<script src="{% static 'js/demo.js' %}"></script>{% endif %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

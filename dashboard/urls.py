@@ -1,10 +1,9 @@
-from django.urls import path, include
+from django.urls import path
+
 from dashboard import views
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
-    path('home/', views.dashboard_home, name='dashboard_home'),
-    path('core/', include('core.urls')),
     path('<slug:slug>/', views.dashboard_home, name='dashboard_home'),
     path('fazenda/<slug:slug>/gerenciar/', views.gerenciar_fazenda, name='gerenciar_fazenda'),
     path('fazenda/<slug:slug>/talhao/editar/', views.editar_talhao, name='editar_talhao'),
@@ -27,5 +26,4 @@ urlpatterns = [
     path('fazenda/<slug:slug>/plantio/cadastrar/', views.criar_plantio, name='criar_plantio'),
     path('fazenda/<slug:slug>/plantios/editar/', views.editar_plantio, name='editar_plantio'),
     path('fazenda/<slug:slug>/plantios/excluir/', views.excluir_plantio, name='excluir_plantio'),
-    path('fazenda/<slug:slug>/colheita/', views.colheita, name='colheita'),
 ]
